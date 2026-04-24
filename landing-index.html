@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plataforma Universitaria BRB — Generador Académico Inteligente</title>
+<meta name="description" content="La plataforma académica que conoce tu universidad, tu carrera y genera trabajos con citas bibliográficas verificadas con página exacta. Para estudiantes universitarios argentinos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1B3A6B;--navy-deep:#0F2244;--navy-mid:#254d8c;
+  --oro:#C8A84B;--oro-light:#e2c97a;--oro-dim:#8a7233;--oro-bg:rgba(200,168,75,.07);
+  --crema:#F7F4EF;--crema-dark:#ede8df;
+  --negro:#0A0A0A;--gris:#111;--gris-b:#1e1e1e;--gris-cl:#888;
+  --error:#c0392b;--success:#1a7a4a;--warning:#b07d1a;
+  --fd:'Cormorant Garamond',Georgia,serif;
+  --fm:'IBM Plex Mono','Courier New',monospace;
+  --fb:'IBM Plex Sans',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:16px;scroll-behavior:smooth;}
+body{background:var(--negro);color:var(--crema);font-family:var(--fb);overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.3;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:.9rem 3rem;background:rgba(10,10,10,.95);border-bottom:1px solid rgba(200,168,75,.12);backdrop-filter:blur(8px);}
+.nav-marca{font-family:var(--fd);font-size:1.1rem;font-weight:700;color:var(--oro);letter-spacing:.05em;}
+.nav-marca em{color:var(--crema);font-weight:300;font-style:italic;}
+.nav-links{display:flex;align-items:center;gap:2rem;}
+.nav-links a{font-family:var(--fm);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gris-cl);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--oro);}
+.btn-nav{background:var(--oro);color:var(--negro);font-family:var(--fm);font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.55rem 1.4rem;text-decoration:none;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);transition:background .2s;}
+.btn-nav:hover{background:var(--oro-light);}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:120px 6rem 80px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-200px;right:-300px;width:800px;height:800px;background:radial-gradient(circle,rgba(27,58,107,.35) 0%,transparent 65%);pointer-events:none;}
+.hero::after{content:'';position:absolute;bottom:-150px;left:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(200,168,75,.06) 0%,transparent 65%);pointer-events:none;}
+.hero-eyebrow{font-family:var(--fm);font-size:.62rem;letter-spacing:.25em;text-transform:uppercase;color:var(--oro);margin-bottom:2rem;display:flex;align-items:center;gap:.75rem;}
+.hero-eyebrow::before{content:'';width:32px;height:1px;background:var(--oro-dim);}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(27,58,107,.3);border:1px solid rgba(37,77,140,.5);padding:.35rem .9rem;font-family:var(--fm);font-size:.6rem;letter-spacing:.1em;color:var(--crema-dark);clip-path:polygon(5px 0%,100% 0%,calc(100% - 5px) 100%,0% 100%);margin-bottom:1.5rem;}
+.hero-titulo{font-family:var(--fd);font-size:clamp(3rem,7vw,5.5rem);font-weight:300;line-height:1.0;margin-bottom:1.5rem;position:relative;z-index:1;}
+.hero-titulo em{color:var(--oro);font-style:italic;}
+.hero-titulo strong{font-weight:700;color:var(--crema);}
+.hero-sub{font-size:1.05rem;color:rgba(247,244,239,.65);line-height:1.8;max-width:600px;margin-bottom:2.5rem;position:relative;z-index:1;}
+.hero-sub strong{color:var(--crema);}
+.hero-ctas{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;position:relative;z-index:1;}
+.btn-primary{display:inline-flex;align-items:center;gap:.6rem;background:var(--oro);color:var(--negro);font-family:var(--fm);font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:16px 32px;text-decoration:none;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);transition:all .2s;}
+.btn-primary:hover{background:var(--oro-light);transform:translateY(-2px);}
+.btn-secondary{display:inline-flex;align-items:center;gap:.6rem;background:transparent;color:var(--oro);font-family:var(--fm);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;padding:15px 32px;text-decoration:none;border:1px solid var(--oro-dim);clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);transition:all .2s;}
+.btn-secondary:hover{border-color:var(--oro);background:var(--oro-bg);}
+.hero-stats{display:flex;gap:3rem;margin-top:3.5rem;padding-top:2.5rem;border-top:1px solid #1a1a1a;position:relative;z-index:1;}
+.stat-item{display:flex;flex-direction:column;gap:.3rem;}
+.stat-num{font-family:var(--fd);font-size:2.2rem;font-weight:700;color:var(--oro);line-height:1;}
+.stat-label{font-family:var(--fm);font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gris-cl);}
+
+/* SECCIÓN GENÉRICA */
+section{padding:80px 6rem;border-bottom:1px solid var(--gris-b);}
+section:last-of-type{border-bottom:none;}
+.sec-eyebrow{font-family:var(--fm);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--oro-dim);margin-bottom:1rem;}
+.sec-titulo{font-family:var(--fd);font-size:clamp(2rem,4vw,3rem);font-weight:300;line-height:1.1;margin-bottom:1.25rem;}
+.sec-titulo em{color:var(--oro);font-style:italic;}
+.sec-lead{font-size:.95rem;color:rgba(247,244,239,.65);line-height:1.85;max-width:680px;margin-bottom:2.5rem;}
+.sec-lead strong{color:var(--crema);}
+
+/* PERFIL HIGHLIGHT */
+.perfil-section{background:linear-gradient(135deg,var(--navy-deep) 0%,#0d1a33 60%,var(--negro) 100%);position:relative;overflow:hidden;}
+.perfil-section::before{content:'';position:absolute;top:-100px;right:-100px;width:500px;height:500px;background:radial-gradient(circle,rgba(200,168,75,.08) 0%,transparent 65%);pointer-events:none;}
+.perfil-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
+.perfil-visual{background:#080808;border:1px solid #1a1a1a;border-top:2px solid var(--oro-dim);padding:2rem;}
+.perfil-ui-header{font-family:var(--fm);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--oro-dim);margin-bottom:1.25rem;padding-bottom:.75rem;border-bottom:1px solid #1a1a1a;}
+.perfil-field{margin-bottom:1rem;}
+.perfil-label{font-family:var(--fm);font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--oro-dim);margin-bottom:.35rem;}
+.perfil-value{background:#0d0d0d;border:1px solid #2a2a2a;padding:.6rem .9rem;font-size:.82rem;color:var(--crema);display:flex;align-items:center;justify-content:space-between;}
+.perfil-value-tag{font-family:var(--fm);font-size:.55rem;color:var(--success);background:rgba(26,122,74,.15);border:1px solid rgba(26,122,74,.25);padding:.15rem .5rem;}
+.norma-badge{display:flex;align-items:center;gap:.5rem;background:rgba(27,58,107,.3);border:1px solid rgba(37,77,140,.4);padding:.6rem .9rem;font-family:var(--fm);font-size:.62rem;color:var(--crema-dark);margin-top:.5rem;}
+.norma-badge strong{color:var(--oro);}
+
+/* FEATURES GRID */
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+.feature-card{background:#0a0a0a;border:1px solid var(--gris-b);padding:1.75rem;transition:border-color .2s;}
+.feature-card:hover{border-color:var(--oro-dim);}
+.feature-icon{font-size:1.6rem;margin-bottom:1rem;}
+.feature-title{font-family:var(--fb);font-size:.95rem;font-weight:600;color:var(--crema);margin-bottom:.5rem;}
+.feature-desc{font-size:.82rem;color:var(--gris-cl);line-height:1.7;}
+.feature-tag{font-family:var(--fm);font-size:.55rem;color:var(--oro-dim);margin-top:.75rem;letter-spacing:.08em;}
+
+/* CITA SECTION */
+.cita-section{background:#060606;}
+.cita-visual{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:2rem;}
+.cita-box{background:#0a0a0a;border:1px solid var(--gris-b);padding:1.5rem;}
+.cita-box-header{font-family:var(--fm);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:1rem;padding-bottom:.6rem;border-bottom:1px solid #1a1a1a;}
+.cita-box.verified .cita-box-header{color:var(--success);}
+.cita-box.suggested .cita-box-header{color:var(--warning);}
+.cita-text{font-size:.82rem;color:var(--crema-dark);line-height:1.75;font-style:italic;}
+.cita-ref{font-family:var(--fm);font-size:.62rem;color:var(--oro);margin-top:.75rem;padding:.5rem .75rem;background:rgba(200,168,75,.06);border-left:2px solid var(--oro-dim);}
+.cita-page-badge{display:inline-flex;align-items:center;gap:.35rem;background:rgba(26,122,74,.15);border:1px solid rgba(26,122,74,.3);padding:.2rem .6rem;font-family:var(--fm);font-size:.58rem;color:#5cb85c;margin-top:.5rem;}
+.cita-warn-badge{display:inline-flex;align-items:center;gap:.35rem;background:rgba(176,125,26,.15);border:1px solid rgba(176,125,26,.3);padding:.2rem .6rem;font-family:var(--fm);font-size:.58rem;color:#e6a820;margin-top:.5rem;}
+
+/* COMPARACION */
+.comparacion-section{background:var(--negro);}
+.comp-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:2rem;}
+.comp-col{background:#0a0a0a;border:1px solid var(--gris-b);overflow:hidden;}
+.comp-col.destacado{border-color:var(--oro-dim);border-top:2px solid var(--oro);}
+.comp-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--gris-b);display:flex;align-items:center;gap:.75rem;}
+.comp-header.destacado-header{background:linear-gradient(90deg,rgba(200,168,75,.08) 0%,transparent 100%);}
+.comp-icon{font-size:1.3rem;}
+.comp-name{font-family:var(--fb);font-size:.9rem;font-weight:600;color:var(--crema);}
+.comp-subtitle{font-family:var(--fm);font-size:.58rem;color:var(--gris-cl);letter-spacing:.08em;margin-top:.15rem;}
+.comp-body{padding:1.25rem 1.5rem;}
+.comp-row{display:flex;align-items:flex-start;gap:.75rem;padding:.55rem 0;border-bottom:1px solid #111;}
+.comp-row:last-child{border-bottom:none;}
+.comp-icon-row{font-size:.9rem;flex-shrink:0;margin-top:.1rem;}
+.comp-text{font-size:.8rem;color:var(--crema-dark);line-height:1.5;}
+.comp-text strong{color:var(--crema);}
+.comp-text.dim{color:#444;}
+.comp-badge-comp{font-family:var(--fm);font-size:.55rem;padding:.15rem .5rem;background:rgba(26,122,74,.15);border:1px solid rgba(26,122,74,.25);color:#5cb85c;margin-left:auto;flex-shrink:0;}
+.comp-badge-no{font-family:var(--fm);font-size:.55rem;padding:.15rem .5rem;background:rgba(68,68,68,.2);border:1px solid #2a2a2a;color:#555;margin-left:auto;flex-shrink:0;}
+.complemento-box{background:linear-gradient(90deg,rgba(27,58,107,.25) 0%,rgba(200,168,75,.06) 100%);border:1px solid rgba(37,77,140,.35);border-left:3px solid var(--navy-mid);padding:1.25rem 1.5rem;margin-top:1.5rem;display:flex;align-items:flex-start;gap:1rem;}
+.complemento-icon{font-size:1.5rem;flex-shrink:0;}
+.complemento-text{font-size:.85rem;color:var(--crema-dark);line-height:1.65;}
+.complemento-text strong{color:var(--oro);}
+
+/* IA GENERICA VS PLATAFORMA */
+.ia-section{background:#060606;}
+.ia-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:2rem;}
+.ia-col{padding:2rem;border:1px solid var(--gris-b);}
+.ia-col.malo{border-color:rgba(192,57,43,.3);background:rgba(192,57,43,.03);}
+.ia-col.bueno{border-color:rgba(200,168,75,.3);background:rgba(200,168,75,.03);}
+.ia-col-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;padding-bottom:.9rem;border-bottom:1px solid var(--gris-b);}
+.ia-col-icon{font-size:1.5rem;}
+.ia-col-title{font-family:var(--fb);font-size:.9rem;font-weight:600;}
+.ia-col.malo .ia-col-title{color:#e74c3c;}
+.ia-col.bueno .ia-col-title{color:var(--oro);}
+.ia-item{display:flex;align-items:flex-start;gap:.6rem;margin-bottom:.75rem;font-size:.82rem;color:var(--crema-dark);line-height:1.5;}
+.ia-item::before{flex-shrink:0;margin-top:.15rem;}
+.ia-col.malo .ia-item::before{content:'✗';color:var(--error);}
+.ia-col.bueno .ia-item::before{content:'✓';color:var(--success);}
+
+/* ADVERTENCIA CRITERIO HUMANO */
+.criterio-section{background:linear-gradient(135deg,var(--navy-deep) 0%,#0a1525 100%);}
+.criterio-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-top:2rem;}
+.criterio-card{background:rgba(0,0,0,.3);border:1px solid rgba(200,168,75,.15);padding:1.5rem;}
+.criterio-num{font-family:var(--fd);font-size:3rem;font-weight:700;color:rgba(200,168,75,.3);line-height:1;margin-bottom:.5rem;}
+.criterio-title{font-family:var(--fb);font-size:.88rem;font-weight:600;color:var(--crema);margin-bottom:.5rem;}
+.criterio-desc{font-size:.8rem;color:rgba(247,244,239,.55);line-height:1.65;}
+.aviso-humano{background:rgba(176,125,26,.08);border:1px solid rgba(176,125,26,.25);border-left:3px solid var(--warning);padding:1.25rem 1.5rem;margin-top:2rem;font-size:.88rem;color:var(--crema-dark);line-height:1.7;}
+.aviso-humano strong{color:#e6a820;}
+
+/* TIPOS TRABAJO */
+.tipos-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-top:1.5rem;}
+.tipo-item{background:#0a0a0a;border:1px solid var(--gris-b);padding:1rem;display:flex;align-items:center;gap:.6rem;transition:border-color .2s;}
+.tipo-item:hover{border-color:var(--oro-dim);}
+.tipo-icon{font-size:1.1rem;flex-shrink:0;}
+.tipo-name{font-size:.78rem;color:var(--crema-dark);line-height:1.3;}
+
+/* UNIVERSIDADES */
+.uni-section{background:#060606;}
+.uni-scroll{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.5rem;}
+.uni-chip{font-family:var(--fm);font-size:.6rem;letter-spacing:.06em;padding:.3rem .75rem;background:rgba(27,58,107,.2);border:1px solid rgba(37,77,140,.3);color:var(--crema-dark);clip-path:polygon(4px 0%,100% 0%,calc(100% - 4px) 100%,0% 100%);transition:all .2s;}
+.uni-chip:hover{background:rgba(27,58,107,.4);border-color:var(--navy-mid);}
+
+/* MODELOS IA */
+.modelos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.5rem;}
+.modelo-card{background:#0a0a0a;border:1px solid var(--gris-b);padding:1.5rem;text-align:center;}
+.modelo-icon{font-size:2rem;margin-bottom:.75rem;}
+.modelo-name{font-family:var(--fm);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--crema);margin-bottom:.3rem;}
+.modelo-desc{font-size:.78rem;color:var(--gris-cl);line-height:1.6;}
+.modelo-tag{font-family:var(--fm);font-size:.55rem;color:var(--oro-dim);margin-top:.5rem;}
+
+/* PLANES */
+.planes-section{background:var(--negro);}
+.planes-box{background:linear-gradient(135deg,#0d1a33 0%,var(--negro) 100%);border:1px solid rgba(200,168,75,.2);border-top:2px solid var(--oro);padding:3rem;text-align:center;max-width:560px;margin:2rem auto 0;}
+.planes-titulo{font-family:var(--fd);font-size:2rem;font-weight:300;margin-bottom:.5rem;}
+.planes-titulo em{color:var(--oro);font-style:italic;}
+.planes-precio{font-family:var(--fd);font-size:3.5rem;font-weight:700;color:var(--oro);margin:1rem 0 .25rem;}
+.planes-periodo{font-family:var(--fm);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gris-cl);margin-bottom:2rem;}
+.planes-lista{list-style:none;text-align:left;margin-bottom:2rem;}
+.planes-lista li{display:flex;align-items:center;gap:.75rem;padding:.5rem 0;font-size:.85rem;color:var(--crema-dark);border-bottom:1px solid #111;}
+.planes-lista li:last-child{border-bottom:none;}
+.planes-lista li::before{content:'✓';color:var(--success);font-family:var(--fm);flex-shrink:0;}
+
+/* FOOTER */
+footer{background:#040404;border-top:1px solid var(--gris-b);padding:3rem 6rem;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:4rem;}
+.footer-marca{font-family:var(--fd);font-size:1.3rem;font-weight:700;color:var(--oro);margin-bottom:.5rem;}
+.footer-marca em{color:var(--crema);font-weight:300;font-style:italic;}
+.footer-desc{font-size:.8rem;color:var(--gris-cl);line-height:1.7;margin-bottom:1rem;}
+.footer-copy{font-family:var(--fm);font-size:.58rem;color:#2a2a2a;letter-spacing:.08em;margin-top:1rem;}
+.footer-col-title{font-family:var(--fm);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--oro-dim);margin-bottom:1rem;}
+.footer-link{display:block;font-size:.8rem;color:var(--gris-cl);text-decoration:none;margin-bottom:.4rem;transition:color .15s;}
+.footer-link:hover{color:var(--oro);}
+.footer-bottom{padding-top:2rem;margin-top:2rem;border-top:1px solid #111;display:flex;align-items:center;justify-content:space-between;font-family:var(--fm);font-size:.58rem;color:#2a2a2a;letter-spacing:.08em;}
+
+/* TIP/AVISO */
+.tip{background:rgba(200,168,75,.05);border:1px solid rgba(200,168,75,.15);border-left:3px solid var(--oro);padding:1rem 1.25rem;margin:1.5rem 0;font-size:.85rem;color:var(--crema-dark);line-height:1.65;}
+.tip strong{color:var(--oro);}
+
+/* ANIMACIONES */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{opacity:0;animation:fadeUp .6s ease forwards;}
+.fade-up.delay-1{animation-delay:.1s}
+.fade-up.delay-2{animation-delay:.2s}
+.fade-up.delay-3{animation-delay:.3s}
+
+/* SEPARADOR DECORATIVO */
+.sep{width:48px;height:2px;background:linear-gradient(90deg,var(--oro),transparent);margin:1.5rem 0;}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  nav{padding:.9rem 2rem;}section{padding:60px 2.5rem;}
+  .hero{padding:120px 2.5rem 60px;}
+  .features-grid{grid-template-columns:1fr 1fr;}
+  .tipos-grid{grid-template-columns:repeat(2,1fr);}
+  footer{padding:3rem 2.5rem;}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:2rem;}
+}
+@media(max-width:768px){
+  .perfil-grid,.comp-grid,.cita-visual,.ia-grid,.criterio-grid,.modelos-grid{grid-template-columns:1fr;}
+  .features-grid{grid-template-columns:1fr;}
+  .tipos-grid{grid-template-columns:1fr 1fr;}
+  .hero-stats{flex-wrap:wrap;gap:1.5rem;}
+  .nav-links{display:none;}
+  .footer-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-marca">BRB <em>Plataforma Universitaria</em></div>
+  <div class="nav-links">
+    <a href="#perfil">Tu perfil</a>
+    <a href="#citas">Citas verificadas</a>
+    <a href="#comparacion">vs Generador Tesis</a>
+    <a href="#ia-generica">vs IA genérica</a>
+    <a href="#acceso">Acceso</a>
+  </div>
+  <a href="https://bbbarrera1986-rgb.github.io/brb-universitario/" class="btn-nav">Ingresar a la plataforma →</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">BRB Estrategia &amp; Procesos · 8.ª herramienta del ecosistema BRB IA</div>
+  <div class="hero-badge">🎓 Para estudiantes universitarios argentinos · Licencia anual</div>
+  <h1 class="hero-titulo fade-up">
+    La plataforma que<br>
+    <em>conoce tu universidad</em><br>
+    y genera con ella
+  </h1>
+  <p class="hero-sub fade-up delay-1">
+    No es un chatbot genérico. Es una plataforma que construye tu perfil académico —
+    <strong>universidad, carrera, año, norma de cita</strong> — y genera todos tus trabajos
+    universitarios con ese contexto, con citas bibliográficas verificadas y página exacta
+    desde tus propias fuentes.
+  </p>
+  <div class="hero-ctas fade-up delay-2">
+    <a href="https://bbbarrera1986-rgb.github.io/brb-universitario/" class="btn-primary">⚡ Ingresar a la plataforma</a>
+    <a href="#comparacion" class="btn-secondary">Ver comparación →</a>
+  </div>
+  <div class="hero-stats fade-up delay-3">
+    <div class="stat-item">
+      <div class="stat-num">40+</div>
+      <div class="stat-label">Universidades argentinas</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">16</div>
+      <div class="stat-label">Tipos de trabajo académico</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">3</div>
+      <div class="stat-label">Modelos de IA disponibles</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">10</div>
+      <div class="stat-label">Trabajos guardados por dispositivo</div>
+    </div>
+  </div>
+</div>
+
+<!-- PERFIL INSTITUCIONAL -->
+<section id="perfil" class="perfil-section">
+  <div class="sec-eyebrow">Tu identidad académica</div>
+  <div class="perfil-grid">
+    <div>
+      <h2 class="sec-titulo">La plataforma que<br><em>reconoce dónde estudiás</em></h2>
+      <p class="sec-lead">Antes de generar cualquier trabajo, la plataforma construye tu perfil completo. Seleccionás tu universidad, escribís tu carrera, elegís el año cursado. Desde ese momento, <strong>cada trabajo generado lleva el contexto de tu institución y tu programa académico.</strong></p>
+      <div class="sep"></div>
+      <p style="font-size:.88rem;color:var(--gris-cl);line-height:1.8;margin-bottom:1rem">El sistema detecta automáticamente tu <strong style="color:var(--crema)">norma de cita bibliográfica</strong> según el área disciplinar de tu carrera. Medicina → Vancouver. Derecho → Chicago. Ciencias Sociales → APA 7. Ingeniería → IEEE. No tenés que buscarlo: la plataforma lo sabe.</p>
+      <p style="font-size:.88rem;color:var(--gris-cl);line-height:1.8">El perfil se guarda en tu dispositivo. Cada nuevo trabajo que creás hereda tu universidad, carrera y materia — sin volver a configurarlo.</p>
+    </div>
+    <div>
+      <div class="perfil-visual">
+        <div class="perfil-ui-header">📋 Perfil académico activo</div>
+        <div class="perfil-field">
+          <div class="perfil-label">Universidad</div>
+          <div class="perfil-value">Universidad Nacional de la Patagonia Austral (UNPA) <span class="perfil-value-tag">Verificado</span></div>
+        </div>
+        <div class="perfil-field">
+          <div class="perfil-label">Carrera</div>
+          <div class="perfil-value">Licenciatura en Enfermería</div>
+        </div>
+        <div class="perfil-field">
+          <div class="perfil-label">Año cursado</div>
+          <div class="perfil-value">3er año</div>
+        </div>
+        <div class="perfil-field">
+          <div class="perfil-label">Área disciplinar</div>
+          <div class="perfil-value">Ciencias de la Salud <span class="perfil-value-tag">Auto</span></div>
+        </div>
+        <div class="norma-badge">
+          📌 Norma de cita detectada: <strong>Vancouver</strong> — estándar para ciencias biomédicas y salud
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CITAS VERIFICADAS -->
+<section id="citas" class="cita-section">
+  <div class="sec-eyebrow">Integridad bibliográfica</div>
+  <h2 class="sec-titulo">Citas con<br><em>página exacta verificada</em></h2>
+  <p class="sec-lead">La diferencia más crítica entre esta plataforma y cualquier otra herramienta de IA: cuando adjuntás tu fuente bibliográfica en PDF, el sistema extrae el texto página a página y genera citas con el número de página real del documento. No inventa páginas. <strong>Las cita desde la fuente que vos proporcionaste.</strong></p>
+
+  <div class="cita-visual">
+    <div class="cita-box verified">
+      <div class="cita-box-header">✓ CON FUENTE ADJUNTA — Cita verificada con página exacta</div>
+      <p class="cita-text">"La prevalencia de Helicobacter pylori en la población adulta de Argentina alcanza niveles significativamente superiores al promedio latinoamericano, asociada directamente a condiciones socioeconómicas y acceso al sistema de salud..."</p>
+      <div class="cita-ref">(Méndez et al., 2021, p. 47) — Extraído de: Gastroenterología_Clínica_2021.pdf</div>
+      <div class="cita-page-badge">✓ Página 47 verificada en fuente adjunta</div>
+    </div>
+    <div class="cita-box suggested">
+      <div class="cita-box-header">⚠ SIN FUENTE ADJUNTA — Referencia académica sugerida</div>
+      <p class="cita-text">"Los estudios epidemiológicos recientes señalan una correlación entre el acceso deficiente a servicios sanitarios básicos y la mayor incidencia de patologías gastrointestinales en regiones rurales..."</p>
+      <div class="cita-ref">(Referencia sugerida — verificar página en fuente original)</div>
+      <div class="cita-warn-badge">⚠ Verificar en fuente original antes de usar</div>
+    </div>
+  </div>
+
+  <div class="tip" style="margin-top:2rem">
+    <strong>📎 Cómo funciona:</strong> Subís tu fuente en PDF o DOCX en el paso 4 del wizard. El sistema lee el documento completo, indexa el contenido por número de página, y cuando genera cada sección del trabajo usa ese material como contexto real. Las citas aparecen con autor, año y número de página exacto tomado de tu documento. Si no adjuntás fuente, las referencias quedan marcadas explícitamente como "sugeridas" para que las verifiques antes de usar.
+  </div>
+</section>
+
+<!-- COMPARACION CON GENERADOR TESIS -->
+<section id="comparacion" class="comparacion-section">
+  <div class="sec-eyebrow">Dentro del ecosistema BRB IA</div>
+  <h2 class="sec-titulo">Plataforma Universitaria<br><em>vs Generador de Tesis</em></h2>
+  <p class="sec-lead">Ambas herramientas pertenecen al ecosistema BRB IA y comparten la misma filosofía de construcción. Pero están diseñadas para propósitos distintos y se complementan. Entendé cuándo usar cada una.</p>
+
+  <div class="comp-grid">
+    <!-- Plataforma Universitaria -->
+    <div class="comp-col destacado">
+      <div class="comp-header destacado-header">
+        <div class="comp-icon">🎓</div>
+        <div>
+          <div class="comp-name">Plataforma Universitaria BRB</div>
+          <div class="comp-subtitle">Para toda la vida universitaria</div>
+        </div>
+      </div>
+      <div class="comp-body">
+        <div class="comp-row">
+          <div class="comp-icon-row">✓</div>
+          <div class="comp-text"><strong>Perfil institucional persistente</strong> — universidad, carrera, año y norma de cita guardados</div>
+          <div class="comp-badge-comp">EXCLUSIVO</div>
+        </div>
+        <div class="comp-row">
+          <div class="comp-icon-row">✓</div>
+          <div class="comp-text"><strong>16 tipos de trabajo académico</strong> — monografía, TP, informe, ensayo, proyecto, caso clínico, dictamen y más</div>
+          <div class="comp-badge-comp">+COMPLETO</div>
+        </div>
+        <div class="comp-row">
+          <div class="comp-icon-row">✓</div>
+          <div class="comp-text"><strong>Norma de cita autodetectada</strong> por área disciplinar — APA, Vancouver, IEEE, Chicago, MLA, ICONTEC</div>
+          <div class="comp-badge-comp">EXCLUSIVO</div>
+        </div>
+        <div class="comp-row">
+          <div class="comp-icon-row">✓</div>
+          <div class="comp-text"><strong>Citas con página exacta verificada</strong> desde PDF adjunto con indexación por página</div>
+          <div class="comp-badge-comp">EXCLUSIVO</div>
+        </div>
+        <div class="comp-row">
+          <div class="comp-icon-row">✓</div>
+          <div class="comp-text"><strong>3 modelos de IA</strong> — Gemini 2.5 Flash, GPT-4o-mini, Claude Sonnet — elegís por trabajo</div>
+          <div class="comp-badge-comp">EXCLUSIVO</div>
+        </div>
+        <div class="comp-row">
+          <div class="comp-icon-row">✓</div>
+          <div class="comp-text"><strong>Historial de 10 trabajos</strong> con progreso, palabras generadas y fecha</div>
+          <div class="comp-badge-comp">EXCLUSIVO</div>
+        </div>
+        <div class="comp-row">
+          <div class="comp-icon-row">✓</div>
+          <div class="comp-text"><strong>Glosario académico</strong> específico por área disciplinar, enriquecido con IA</div>
+          <div class="comp-badge-comp">EXCLUSIVO</div>
+        </div>
+        <div class="comp-row">
+          <div class="comp-icon-row">✓</div>
+          <div class="comp-text"><strong>40+ universidades argentinas</strong> hardcodeadas — el contenido se adapta a tu institución</div>
+          <div class="comp-badge-comp">EXCLUSIVO</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Generador Tesis -->
+    <div class="comp-col">
+      <div class="comp-header">
+        <div class="comp-icon">📗</div>
+        <div>
+          <div class="comp-name">Generador de Tesis BRB</div>
+          <div class="comp-subtitle">Especializado en investigación de tesis</div>
+        </div>
+      </div>
+      <div class="comp-body">
+        <div class="comp-row">
+          <div class="comp-icon-row">○</div>
+          <div class="comp-text comp-dim">Sin perfil institucional — configuración manual por sesión</div>
+          <div class="comp-badge-no">BÁSICO</div>
+        </div>
+        <div class="comp-row">
+          <div class="comp-icon-row">✓</div>
+          <div class="comp-text"><strong>6 tipos de trabajo de investigación</strong> — tesis de grado, posgrado, monografía, informe técnico</div>
+        </div>
+        <div class="comp-row">
+          <div class="comp-icon-row">○</div>
+          <div class="comp-text comp-dim">Norma de cita seleccionada manualmente — sin autodetección</div>
+          <div class="comp-badge-no">MANUAL</div>
+        </div>
+        <div class="comp-row">
+          <div class="comp-icon-row">✓</div>
+          <div class="comp-text"><strong>Adjunto de documentos</strong> PDF/DOCX para contexto — sin indexación por página</div>
+        </div>
+        <div class="comp-row">
+          <div class="comp-icon-row">✓</div>
+          <div class="comp-text"><strong>Gemini 2.5 Flash</strong> — modelo único, eficiente para investigación</div>
+        </div>
+        <div class="comp-row">
+          <div class="comp-icon-row">○</div>
+          <div class="comp-text comp-dim">1 trabajo guardado — sin historial múltiple</div>
+          <div class="comp-badge-no">LIMITADO</div>
+        </div>
+        <div class="comp-row">
+          <div class="comp-icon-row">○</div>
+          <div class="comp-text comp-dim">Sin glosario por área disciplinar</div>
+          <div class="comp-badge-no">NO</div>
+        </div>
+        <div class="comp-row">
+          <div class="comp-icon-row">✓</div>
+          <div class="comp-text"><strong>Guardado en la nube</strong> (Supabase) — acceso desde cualquier navegador con la misma sesión</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="complemento-box">
+    <div class="complemento-icon">🔗</div>
+    <div class="complemento-text">
+      <strong>El Generador de Tesis es el complemento natural de esta plataforma:</strong> cuando llegues al trabajo final de carrera o la tesis de grado — el trabajo más extenso, más formal y de mayor peso académico — podés usar el Generador de Tesis BRB específicamente diseñado para ese tipo de investigación extensa. Son herramientas que se potencian mutuamente dentro del mismo ecosistema BRB IA.
+      <br><br>
+      <a href="https://bbbarrera1986-rgb.github.io/brb-tesis/" style="color:var(--oro);font-family:var(--fm);font-size:.65rem;letter-spacing:.08em;">Ver Generador de Tesis BRB →</a>
+    </div>
+  </div>
+</section>
+
+<!-- IA GENERICA VS PLATAFORMA -->
+<section id="ia-generica" class="ia-section">
+  <div class="sec-eyebrow">Por qué no alcanza con un chatbot</div>
+  <h2 class="sec-titulo">IA genérica<br><em>vs esta plataforma</em></h2>
+  <p class="sec-lead">Pedirle a ChatGPT o a cualquier IA genérica que te escriba un trabajo universitario no es lo mismo que usar esta plataforma. La diferencia no está en la calidad del modelo — está en el contexto, la estructura y la trazabilidad.</p>
+
+  <div class="ia-grid">
+    <div class="ia-col malo">
+      <div class="ia-col-header">
+        <div class="ia-col-icon">💬</div>
+        <div class="ia-col-title">IA genérica (ChatGPT, Gemini libre, etc.)</div>
+      </div>
+      <div class="ia-item">No sabe que estudiás en la UNPA, UNC, UBA o cualquier otra institución — genera contenido sin contexto institucional</div>
+      <div class="ia-item">No conoce las normas de tu facultad ni la currícula de tu carrera — genera estructura genérica</div>
+      <div class="ia-item">No controla el estilo de cita por área disciplinar — podés terminar con Vancouver en Derecho o APA en Medicina</div>
+      <div class="ia-item">Inventa referencias bibliográficas con páginas falsas — práctica conocida como "alucinación" en IA</div>
+      <div class="ia-item">No guarda tu historial de trabajos — cada sesión empieza desde cero</div>
+      <div class="ia-item">El índice y las secciones no tienen coherencia asegurada — cada prompt es independiente</div>
+      <div class="ia-item">No permite adjuntar y citar fuentes reales con página exacta verificada</div>
+    </div>
+    <div class="ia-col bueno">
+      <div class="ia-col-header">
+        <div class="ia-col-icon">🎓</div>
+        <div class="ia-col-title">Plataforma Universitaria BRB</div>
+      </div>
+      <div class="ia-item">Tu universidad, carrera y año forman parte del prompt de cada sección — el contenido se adapta a tu institución real</div>
+      <div class="ia-item">El wizard configura la estructura correcta para tu tipo de trabajo en tu nivel académico</div>
+      <div class="ia-item">Norma de cita autodetectada y aplicada consistentemente en todo el documento</div>
+      <div class="ia-item">Las citas con fuente adjunta incluyen página real extraída de tu PDF — marcadas como "verificadas". Las sin fuente se marcan explícitamente como "sugeridas"</div>
+      <div class="ia-item">Historial de 10 trabajos con continuación donde lo dejaste</div>
+      <div class="ia-item">El índice completo actúa como contexto global — cada sección generada conoce la estructura total</div>
+      <div class="ia-item">Adjunto de PDF con extracción e indexación por página para cita verificada</div>
+    </div>
+  </div>
+</section>
+
+<!-- CRITERIO HUMANO -->
+<section class="criterio-section">
+  <div class="sec-eyebrow">Principio fundamental de uso</div>
+  <h2 class="sec-titulo" style="color:var(--crema)">El criterio humano<br><em>siempre prevalece</em></h2>
+  <p class="sec-lead">Esta plataforma genera borradores orientativos de alta calidad. No reemplaza tu pensamiento crítico, tu investigación original ni tu responsabilidad académica. El texto producido por la IA es el punto de partida — no el producto final.</p>
+
+  <div class="criterio-grid">
+    <div class="criterio-card">
+      <div class="criterio-num">01</div>
+      <div class="criterio-title">Revisión obligatoria</div>
+      <div class="criterio-desc">Todo texto generado debe ser leído, evaluado y editado por el autor. La IA puede cometer errores conceptuales que solo el estudiante informado puede detectar.</div>
+    </div>
+    <div class="criterio-card">
+      <div class="criterio-num">02</div>
+      <div class="criterio-title">Verificación de fuentes</div>
+      <div class="criterio-desc">Las referencias marcadas como "sugeridas" deben ser verificadas en las fuentes originales antes de ser incluidas en cualquier entrega académica.</div>
+    </div>
+    <div class="criterio-card">
+      <div class="criterio-num">03</div>
+      <div class="criterio-title">Integridad académica</div>
+      <div class="criterio-desc">Presentar texto generado por IA sin revisión ni declaración puede constituir una falta según las políticas de tu institución. Usá la herramienta como andamiaje, no como sustituto.</div>
+    </div>
+  </div>
+
+  <div class="aviso-humano">
+    <strong>⚠ Declaración de uso responsable:</strong> Esta plataforma está diseñada para asistir al estudiante en la organización y redacción inicial de sus trabajos académicos. El contenido generado es un borrador de referencia que requiere revisión crítica, edición personal y verificación de las fuentes citadas. La responsabilidad intelectual y académica del trabajo presentado corresponde exclusivamente al autor humano. BRB Estrategia &amp; Procesos no asume responsabilidad por el uso del material generado sin la debida supervisión y edición del estudiante.
+  </div>
+</section>
+
+<!-- TIPOS DE TRABAJO -->
+<section style="background:var(--negro)">
+  <div class="sec-eyebrow">Cobertura académica completa</div>
+  <h2 class="sec-titulo">16 tipos de trabajo<br><em>universitario argentino</em></h2>
+  <p class="sec-lead">Desde el trabajo práctico de primer año hasta el protocolo de investigación de posgrado. La plataforma reconoce el tipo de trabajo y genera la estructura correcta para cada uno.</p>
+  <div class="tipos-grid">
+    <div class="tipo-item"><div class="tipo-icon">📄</div><div class="tipo-name">Monografía</div></div>
+    <div class="tipo-item"><div class="tipo-icon">📝</div><div class="tipo-name">Trabajo Práctico</div></div>
+    <div class="tipo-item"><div class="tipo-icon">🔬</div><div class="tipo-name">Informe de Laboratorio</div></div>
+    <div class="tipo-item"><div class="tipo-icon">🔍</div><div class="tipo-name">Trabajo de Investigación</div></div>
+    <div class="tipo-item"><div class="tipo-icon">✍️</div><div class="tipo-name">Ensayo Académico</div></div>
+    <div class="tipo-item"><div class="tipo-icon">🎯</div><div class="tipo-name">Proyecto de Investigación</div></div>
+    <div class="tipo-item"><div class="tipo-icon">📚</div><div class="tipo-name">Revisión Bibliográfica</div></div>
+    <div class="tipo-item"><div class="tipo-icon">📋</div><div class="tipo-name">Resumen / Síntesis</div></div>
+    <div class="tipo-item"><div class="tipo-icon">🏥</div><div class="tipo-name">Caso Clínico / Estudio de Caso</div></div>
+    <div class="tipo-item"><div class="tipo-icon">📊</div><div class="tipo-name">Plan de Negocios</div></div>
+    <div class="tipo-item"><div class="tipo-icon">🎓</div><div class="tipo-name">Trabajo Final de Carrera</div></div>
+    <div class="tipo-item"><div class="tipo-icon">📗</div><div class="tipo-name">Tesis de Grado</div></div>
+    <div class="tipo-item"><div class="tipo-icon">🏢</div><div class="tipo-name">Informe de Práctica Profesional</div></div>
+    <div class="tipo-item"><div class="tipo-icon">📐</div><div class="tipo-name">Protocolo de Investigación</div></div>
+    <div class="tipo-item"><div class="tipo-icon">⚖️</div><div class="tipo-name">Análisis Jurídico / Dictamen</div></div>
+    <div class="tipo-item"><div class="tipo-icon">⚙️</div><div class="tipo-name">Informe Técnico</div></div>
+  </div>
+</section>
+
+<!-- UNIVERSIDADES -->
+<section class="uni-section">
+  <div class="sec-eyebrow">Base institucional argentina</div>
+  <h2 class="sec-titulo">+40 universidades<br><em>nacionales reconocidas</em></h2>
+  <p class="sec-lead">El sistema contiene las principales universidades nacionales argentinas organizadas por región. Al seleccionar tu institución, el modelo de IA incorpora ese contexto en cada sección generada.</p>
+  <div class="uni-scroll">
+    <span class="uni-chip">UBA</span><span class="uni-chip">UNC</span><span class="uni-chip">UNLP</span>
+    <span class="uni-chip">UTN</span><span class="uni-chip">UNPA</span><span class="uni-chip">UNPSJB</span>
+    <span class="uni-chip">UNMdP</span><span class="uni-chip">UNS</span><span class="uni-chip">UNICEN</span>
+    <span class="uni-chip">UNL</span><span class="uni-chip">UNER</span><span class="uni-chip">UNNE</span>
+    <span class="uni-chip">UNCuyo</span><span class="uni-chip">UNSJ</span><span class="uni-chip">UNT</span>
+    <span class="uni-chip">UNSa</span><span class="uni-chip">UNJu</span><span class="uni-chip">UNLaR</span>
+    <span class="uni-chip">UNCO</span><span class="uni-chip">UNRN</span><span class="uni-chip">UNSAM</span>
+    <span class="uni-chip">UNQ</span><span class="uni-chip">UNLu</span><span class="uni-chip">UNLaM</span>
+    <span class="uni-chip">UNGS</span><span class="uni-chip">UNDAV</span><span class="uni-chip">UNAJ</span>
+    <span class="uni-chip">UNRC</span><span class="uni-chip">UNVM</span><span class="uni-chip">UNAF</span>
+    <span class="uni-chip">UNCAUS</span><span class="uni-chip">UNPAZ</span>
+    <span class="uni-chip">+ Otra institución</span>
+  </div>
+</section>
+
+<!-- MODELOS IA -->
+<section style="background:var(--negro)">
+  <div class="sec-eyebrow">Triple motor de IA</div>
+  <h2 class="sec-titulo">Elegís el modelo<br><em>para cada trabajo</em></h2>
+  <p class="sec-lead">La plataforma integra los tres modelos de IA más capaces del mercado. Configurás tus claves una sola vez y elegís cuál usar en cada trabajo según tu preferencia o disponibilidad.</p>
+  <div class="modelos-grid">
+    <div class="modelo-card">
+      <div class="modelo-icon">🔷</div>
+      <div class="modelo-name">Gemini 2.5 Flash</div>
+      <div class="modelo-desc">Modelo de Google. Gratuito con API Key de Google AI Studio. Rápido y preciso para trabajos académicos de cualquier extensión.</div>
+      <div class="modelo-tag">Recomendado · Gratuito</div>
+    </div>
+    <div class="modelo-card">
+      <div class="modelo-icon">🟢</div>
+      <div class="modelo-name">GPT-4o-mini</div>
+      <div class="modelo-desc">Modelo de OpenAI. Excelente para trabajos en ciencias sociales, derecho y humanidades. Requiere API Key de OpenAI.</div>
+      <div class="modelo-tag">OpenAI · Bajo costo</div>
+    </div>
+    <div class="modelo-card">
+      <div class="modelo-icon">🟠</div>
+      <div class="modelo-name">Claude Sonnet</div>
+      <div class="modelo-desc">Modelo de Anthropic. Superior en análisis crítico, argumentación y trabajos de investigación complejos. Requiere API Key de Anthropic.</div>
+      <div class="modelo-tag">Anthropic · Premium</div>
+    </div>
+  </div>
+</section>
+
+<!-- ACCESO Y PLANES -->
+<section id="acceso" class="planes-section">
+  <div class="sec-eyebrow" style="text-align:center">Acceso a la plataforma</div>
+  <h2 class="sec-titulo" style="text-align:center">Licencia<br><em>anual individual</em></h2>
+  <div class="planes-box">
+    <div class="planes-titulo">Plataforma<br><em>Universitaria BRB</em></div>
+    <div style="font-family:var(--fm);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gris-cl);margin:1rem 0 .25rem">Licencia anual · 1 usuario · 1 dispositivo</div>
+    <ul class="planes-lista">
+      <li>Acceso completo a los 16 tipos de trabajo académico</li>
+      <li>Perfil universitario persistente con tu institución y carrera</li>
+      <li>3 modelos de IA configurables (Gemini + GPT + Claude)</li>
+      <li>Citas verificadas con página exacta desde tus fuentes PDF</li>
+      <li>Historial de 10 trabajos guardados en tu dispositivo</li>
+      <li>Glosario académico por área disciplinar</li>
+      <li>Vigencia hasta la fecha acordada · Renovación disponible</li>
+    </ul>
+    <a href="mailto:bbbarrera1986@gmail.com?subject=Solicitud%20de%20licencia%20%E2%80%94%20Plataforma%20Universitaria%20BRB&body=Hola%20Boris%2C%0A%0AQuiero%20solicitar%20una%20licencia%20para%20la%20Plataforma%20Universitaria%20BRB.%0A%0ANombre%3A%0AUniversidad%3A%0ACarrera%3A%0AEmail%3A%0A" class="btn-primary" style="width:100%;justify-content:center;margin-bottom:.75rem">Solicitar licencia →</a>
+    <a href="https://bbbarrera1986-rgb.github.io/brb-universitario/" class="btn-secondary" style="width:100%;justify-content:center">Ya tengo licencia — Ingresar</a>
+    <p style="font-family:var(--fm);font-size:.58rem;color:#333;text-align:center;margin-top:1rem;line-height:1.6">Respuesta en menos de 24 hs hábiles · Sin intermediarios · bbbarrera1986@gmail.com</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-marca">BRB <em>Plataforma Universitaria</em></div>
+      <p class="footer-desc">Herramienta académica inteligente para estudiantes universitarios argentinos. 8.ª herramienta del ecosistema BRB IA. Desarrollada por Boris Rodríguez Barrera bajo Soberanía Técnica Ediciones.</p>
+      <div style="font-family:var(--fm);font-size:.58rem;color:#333;line-height:1.8">
+        Boris Rodríguez Barrera · ORCID 0009-0004-6583-6439<br>
+        Especialista en Gestión de Calidad e Inteligencia Artificial Aplicada<br>
+        Docente — Escuela Municipal de Pesca N.° 2701 "Juan Demonte"<br>
+        Puerto Madryn · Chubut · Argentina
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Herramientas BRB IA</div>
+      <a class="footer-link" href="https://bbbarrera1986-rgb.github.io/brb-universitario/">Plataforma Universitaria</a>
+      <a class="footer-link" href="https://bbbarrera1986-rgb.github.io/brb-tesis/">Generador de Tesis</a>
+      <a class="footer-link" href="https://bbbarrera1986-rgb.github.io/brb-inclusion/">Generador de Inclusión</a>
+      <a class="footer-link" href="https://bbbarrera1986-rgb.github.io/brb-generador/">Generador de Clases</a>
+    </div>
+    <div>
+      <div class="footer-col-title">Contacto</div>
+      <a class="footer-link" href="mailto:bbbarrera1986@gmail.com?subject=Solicitud%20licencia%20Plataforma%20Universitaria%20BRB">Solicitar licencia</a>
+      <a class="footer-link" href="mailto:bbbarrera1986@gmail.com?subject=Cambio%20de%20dispositivo%20Plataforma%20Universitaria%20BRB">Cambio de dispositivo</a>
+      <a class="footer-link" href="mailto:bbbarrera1986@gmail.com?subject=Renovaci%C3%B3n%20Plataforma%20Universitaria%20BRB">Renovar licencia</a>
+      <a class="footer-link" href="mailto:bbbarrera1986@gmail.com?subject=Soporte%20t%C3%A9cnico%20Plataforma%20Universitaria%20BRB">Soporte técnico</a>
+      <a class="footer-link" href="https://bbbarrera1986-rgb.github.io/brb-universitario/manual/">Manual de usuario</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 BRB Estrategia &amp; Procesos · Soberanía Técnica Ediciones · Puerto Madryn, Argentina</span>
+    <span>Plataforma Universitaria BRB v1.0</span>
+  </div>
+</footer>
+
+<script>
+// Scroll suave para links internos
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+// Activar animaciones fade-up con IntersectionObserver
+const fadeEls = document.querySelectorAll('.fade-up');
+const fadeObs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.animationPlayState = 'running';
+      fadeObs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+fadeEls.forEach(el => {
+  el.style.animationPlayState = 'paused';
+  fadeObs.observe(el);
+});
+
+// Nav activo en scroll
+const sections = document.querySelectorAll('section[id], .hero');
+const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+const navObs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(l => l.style.color = '');
+      const target = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
+      if (target) target.style.color = 'var(--oro)';
+    }
+  });
+}, { rootMargin: '-30% 0px -60% 0px' });
+sections.forEach(s => { if (s.id) navObs.observe(s); });
+</script>
+</body>
+</html>
