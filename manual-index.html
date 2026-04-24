@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual de Usuario — Plataforma Universitaria BRB</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1B3A6B;--navy-mid:#254d8c;
+  --oro:#C8A84B;--oro-dim:#8a7233;--oro-bg:rgba(200,168,75,.08);
+  --crema:#F7F4EF;--crema-dark:#ede8df;
+  --negro:#0A0A0A;--gris:#111;--gris-b:#1e1e1e;--gris-cl:#888;
+  --error:#c0392b;--success:#1a7a4a;--warning:#b07d1a;
+  --fd:'Cormorant Garamond',Georgia,serif;
+  --fm:'IBM Plex Mono','Courier New',monospace;
+  --fb:'IBM Plex Sans',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:16px;scroll-behavior:smooth;}
+body{background:var(--negro);color:var(--crema);font-family:var(--fb);display:grid;grid-template-columns:280px 1fr;min-height:100vh;}
+
+/* SIDEBAR */
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:280px;background:#080808;border-right:1px solid var(--gris-b);display:flex;flex-direction:column;overflow-y:auto;z-index:100;}
+.sidebar::-webkit-scrollbar{width:3px;}
+.sidebar::-webkit-scrollbar-thumb{background:#2a2a2a;}
+.sb-logo{padding:2rem 1.5rem 1.5rem;border-bottom:1px solid var(--gris-b);}
+.sb-marca{font-family:var(--fd);font-size:1.4rem;font-weight:700;color:var(--oro);letter-spacing:.05em;}
+.sb-marca em{color:var(--crema);font-weight:300;font-style:italic;}
+.sb-sub{font-family:var(--fm);font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gris-cl);margin-top:.25rem;}
+.sb-version{font-family:var(--fm);font-size:.55rem;color:#333;margin-top:.25rem;}
+.sb-sec{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:#333;padding:.75rem 1.5rem .4rem;}
+.sb-link{display:flex;align-items:center;gap:.75rem;padding:.65rem 1.5rem;text-decoration:none;color:var(--gris-cl);font-size:.82rem;transition:all .15s;border-left:2px solid transparent;}
+.sb-link:hover{color:var(--crema);background:rgba(255,255,255,.03);border-left-color:var(--oro-dim);}
+.sb-link.activo{color:var(--oro);background:var(--oro-bg);border-left-color:var(--oro);}
+.sb-num{font-family:var(--fm);font-size:.58rem;color:var(--oro-dim);min-width:22px;}
+.sb-footer{margin-top:auto;padding:1.5rem;border-top:1px solid var(--gris-b);}
+.sb-footer-brand{font-family:var(--fm);font-size:.55rem;color:#2a2a2a;letter-spacing:.08em;line-height:1.8;}
+.sb-footer-brand a{color:var(--oro-dim);text-decoration:none;}
+
+/* CONTENIDO */
+.contenido{grid-column:2;margin-left:0;}
+
+/* PORTADA */
+.portada{background:linear-gradient(135deg,var(--navy) 0%,#0d1f3a 60%,var(--negro) 100%);padding:80px 80px 60px;border-bottom:1px solid var(--gris-b);position:relative;overflow:hidden;}
+.portada::before{content:'';position:absolute;top:-100px;right:-100px;width:500px;height:500px;background:radial-gradient(circle,rgba(200,168,75,.1) 0%,transparent 70%);pointer-events:none;}
+.portada-eyebrow{font-family:var(--fm);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,168,75,.6);margin-bottom:1.5rem;}
+.portada-titulo{font-family:var(--fd);font-size:3.5rem;font-weight:300;line-height:1.05;margin-bottom:1.25rem;position:relative;z-index:1;}
+.portada-titulo em{color:var(--oro);font-style:italic;}
+.portada-sub{font-size:.95rem;color:rgba(245,240,232,.7);line-height:1.75;max-width:620px;margin-bottom:2rem;}
+.portada-chips{display:flex;flex-wrap:wrap;gap:.5rem;}
+.chip{font-family:var(--fm);font-size:.58rem;letter-spacing:.08em;padding:.3rem .75rem;background:rgba(200,168,75,.1);border:1px solid rgba(200,168,75,.2);color:var(--oro);clip-path:polygon(5px 0%,100% 0%,calc(100% - 5px) 100%,0% 100%);}
+
+/* SECCIONES */
+.seccion{padding:56px 80px;border-bottom:1px solid var(--gris-b);}
+.seccion:last-child{border-bottom:none;}
+.sec-num{font-family:var(--fm);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--oro-dim);margin-bottom:.75rem;}
+.sec-titulo{font-family:var(--fd);font-size:2.2rem;font-weight:300;line-height:1.15;margin-bottom:1.25rem;}
+.sec-titulo em{color:var(--oro);font-style:italic;}
+.sec-lead{font-size:1rem;color:var(--crema-dark);line-height:1.8;margin-bottom:2rem;max-width:680px;}
+.sec-p{font-size:.9rem;color:var(--gris-cl);line-height:1.8;margin-bottom:1.25rem;max-width:680px;}
+.sec-p strong{color:var(--crema);}
+.sec-h3{font-family:var(--fd);font-size:1.3rem;font-weight:600;color:var(--crema);margin:2rem 0 .75rem;}
+.sec-h4{font-family:var(--fm);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--oro);margin:1.5rem 0 .6rem;}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;gap:0;margin:1.5rem 0;}
+.step{display:flex;gap:1.5rem;padding:1.25rem 0;border-bottom:1px solid #111;position:relative;}
+.step:last-child{border-bottom:none;}
+.step-left{display:flex;flex-direction:column;align-items:center;gap:0;}
+.step-num-box{width:36px;height:36px;background:var(--negro);border:1px solid var(--oro-dim);display:flex;align-items:center;justify-content:center;font-family:var(--fm);font-size:.75rem;color:var(--oro);flex-shrink:0;clip-path:polygon(5px 0%,100% 0%,calc(100% - 5px) 100%,0% 100%);}
+.step-line{flex:1;width:1px;background:#1a1a1a;margin-top:.25rem;}
+.step-body{flex:1;padding-bottom:.5rem;}
+.step-title{font-family:var(--fb);font-size:.9rem;font-weight:600;color:var(--crema);margin-bottom:.4rem;}
+.step-desc{font-size:.85rem;color:var(--gris-cl);line-height:1.65;}
+.step-desc strong{color:var(--crema);}
+
+/* CARDS */
+.card-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0;}
+.card-grid-3{grid-template-columns:repeat(3,1fr);}
+.card{background:#0a0a0a;border:1px solid var(--gris-b);padding:1.5rem;}
+.card-icon{font-size:1.5rem;margin-bottom:.75rem;}
+.card-title{font-family:var(--fb);font-size:.9rem;font-weight:600;color:var(--crema);margin-bottom:.4rem;}
+.card-desc{font-size:.8rem;color:var(--gris-cl);line-height:1.6;}
+.card-tag{font-family:var(--fm);font-size:.55rem;color:var(--oro-dim);margin-top:.6rem;letter-spacing:.08em;}
+
+/* TIP / AVISO / INFO */
+.tip{background:rgba(200,168,75,.05);border:1px solid rgba(200,168,75,.15);border-left:3px solid var(--oro);padding:1rem 1.25rem;margin:1.5rem 0;font-size:.85rem;color:var(--crema-dark);line-height:1.65;}
+.tip strong{color:var(--oro);}
+.aviso{background:rgba(192,57,43,.06);border:1px solid rgba(192,57,43,.2);border-left:3px solid var(--error);padding:1rem 1.25rem;margin:1.5rem 0;font-size:.85rem;color:var(--crema-dark);line-height:1.65;}
+.aviso strong{color:#e74c3c;}
+.info{background:rgba(27,58,107,.1);border:1px solid rgba(37,77,140,.25);border-left:3px solid var(--navy-mid);padding:1rem 1.25rem;margin:1.5rem 0;font-size:.85rem;color:var(--crema-dark);line-height:1.65;}
+.info strong{color:#7aa3d4;}
+.ok{background:rgba(26,122,74,.07);border:1px solid rgba(26,122,74,.2);border-left:3px solid var(--success);padding:1rem 1.25rem;margin:1.5rem 0;font-size:.85rem;color:var(--crema-dark);line-height:1.65;}
+.ok strong{color:#5cb85c;}
+
+/* CODE */
+.code-block{background:#080808;border:1px solid #1a1a1a;border-left:3px solid var(--oro-dim);padding:1rem 1.25rem;margin:1rem 0;font-family:var(--fm);font-size:.78rem;color:#aaa;line-height:1.7;white-space:pre-wrap;overflow-x:auto;}
+.code-label{font-family:var(--fm);font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:var(--oro-dim);margin-bottom:.4rem;}
+
+/* TABLE */
+.tabla{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.82rem;}
+.tabla th{background:#0a0a0a;font-family:var(--fm);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--oro);padding:.75rem 1rem;text-align:left;border-bottom:1px solid var(--oro-dim);}
+.tabla td{padding:.7rem 1rem;border-bottom:1px solid #111;color:var(--crema-dark);vertical-align:top;line-height:1.5;}
+.tabla tr:last-child td{border-bottom:none;}
+.tabla tr:hover td{background:#080808;}
+
+/* LISTA */
+.lista{list-style:none;display:flex;flex-direction:column;gap:.6rem;margin:1rem 0;}
+.lista li{display:flex;align-items:flex-start;gap:.75rem;font-size:.875rem;color:var(--crema-dark);line-height:1.6;}
+.lista li::before{content:'→';color:var(--oro-dim);flex-shrink:0;margin-top:.05rem;font-family:var(--fm);}
+.lista li strong{color:var(--crema);}
+
+/* BADGE */
+.badge{display:inline-block;font-family:var(--fm);font-size:.58rem;letter-spacing:.1em;padding:.25rem .6rem;clip-path:polygon(4px 0%,100% 0%,calc(100% - 4px) 100%,0% 100%);}
+.badge-oro{background:var(--oro-bg);border:1px solid rgba(200,168,75,.2);color:var(--oro);}
+.badge-navy{background:rgba(27,58,107,.2);border:1px solid rgba(37,77,140,.3);color:#7aa3d4;}
+.badge-ok{background:rgba(26,122,74,.1);border:1px solid rgba(26,122,74,.2);color:#4caf82;}
+.badge-err{background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.2);color:#e74c3c;}
+.badge-warn{background:rgba(176,125,26,.1);border:1px solid rgba(176,125,26,.2);color:#e6a820;}
+
+/* FLUJO VISUAL */
+.flujo{display:flex;align-items:stretch;gap:0;margin:1.5rem 0;overflow-x:auto;}
+.flujo-item{background:#0a0a0a;border:1px solid var(--gris-b);padding:1rem 1.25rem;display:flex;flex-direction:column;align-items:center;text-align:center;min-width:120px;flex:1;position:relative;}
+.flujo-item::after{content:'→';position:absolute;right:-14px;top:50%;transform:translateY(-50%);color:var(--oro-dim);font-family:var(--fm);font-size:.7rem;z-index:1;}
+.flujo-item:last-child::after{display:none;}
+.flujo-num{font-family:var(--fm);font-size:.58rem;color:var(--oro-dim);margin-bottom:.4rem;}
+.flujo-icon{font-size:1.3rem;margin-bottom:.4rem;}
+.flujo-label{font-family:var(--fm);font-size:.6rem;letter-spacing:.08em;color:var(--crema-dark);line-height:1.4;}
+
+/* PANTALLA SIMULADA */
+.screen-sim{background:#060606;border:1px solid var(--gris-b);border-top:2px solid var(--oro-dim);margin:1.5rem 0;overflow:hidden;}
+.screen-sim-bar{background:#0a0a0a;border-bottom:1px solid var(--gris-b);padding:.5rem 1rem;display:flex;align-items:center;gap:.75rem;}
+.screen-sim-dot{width:8px;height:8px;border-radius:50%;}
+.screen-sim-title{font-family:var(--fm);font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gris-cl);}
+.screen-sim-body{padding:1.25rem 1.5rem;}
+
+/* COMPARACION CITAS */
+.cita-compare{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0;}
+.cita-box{background:#0a0a0a;border:1px solid var(--gris-b);padding:1.25rem;}
+.cita-box.verified{border-left:3px solid var(--success);}
+.cita-box.suggested{border-left:3px solid var(--warning);}
+.cita-header{font-family:var(--fm);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.75rem;}
+.cita-box.verified .cita-header{color:var(--success);}
+.cita-box.suggested .cita-header{color:var(--warning);}
+.cita-texto{font-size:.8rem;color:var(--crema-dark);line-height:1.7;font-style:italic;margin-bottom:.6rem;}
+.cita-ref{font-family:var(--fm);font-size:.65rem;color:var(--oro);background:rgba(200,168,75,.05);border-left:2px solid var(--oro-dim);padding:.4rem .6rem;}
+
+/* CONTACTO */
+.contacto-box{background:linear-gradient(135deg,var(--navy) 0%,#0d1f3a 100%);padding:3rem;text-align:center;margin-top:2rem;}
+.contacto-titulo{font-family:var(--fd);font-size:2rem;font-weight:300;margin-bottom:1rem;}
+.contacto-titulo em{color:var(--oro);font-style:italic;}
+.contacto-desc{color:rgba(245,240,232,.7);font-size:.9rem;line-height:1.7;margin-bottom:2rem;max-width:500px;margin-left:auto;margin-right:auto;}
+.btn-contacto{display:inline-flex;align-items:center;gap:.6rem;background:var(--oro);color:var(--negro);font-family:var(--fb);font-size:.8rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:14px 30px;text-decoration:none;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);transition:background .2s;}
+.btn-contacto:hover{background:#e2c97a;}
+
+/* PRINT + RESPONSIVE */
+@media print{body{grid-template-columns:1fr;}.sidebar{display:none;}.seccion,.portada{padding:28px 32px;}}
+@media(max-width:900px){body{grid-template-columns:1fr;}.sidebar{display:none;}.seccion,.portada{padding:32px 24px;}.card-grid{grid-template-columns:1fr;}.card-grid-3{grid-template-columns:1fr 1fr;}.cita-compare{grid-template-columns:1fr;}.flujo{flex-direction:column;}}
+@media(max-width:600px){.card-grid-3{grid-template-columns:1fr;}.portada-titulo{font-size:2.5rem;}}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sb-logo">
+    <div class="sb-marca">BRB <em>Universitario</em></div>
+    <div class="sb-sub">Manual de Usuario</div>
+    <div class="sb-version">v1.0 · Abril 2026</div>
+  </div>
+  <div class="sb-sec">Contenido</div>
+  <a class="sb-link activo" href="#que-es"><span class="sb-num">01</span>¿Qué es?</a>
+  <a class="sb-link" href="#licencia"><span class="sb-num">02</span>Activar licencia</a>
+  <a class="sb-link" href="#claves"><span class="sb-num">03</span>Claves de IA</a>
+  <a class="sb-link" href="#perfil"><span class="sb-num">04</span>Tu perfil universitario</a>
+  <a class="sb-link" href="#historial"><span class="sb-num">05</span>Historial de trabajos</a>
+  <a class="sb-link" href="#wizard"><span class="sb-num">06</span>El wizard (5 pasos)</a>
+  <a class="sb-link" href="#adjuntos"><span class="sb-num">07</span>Adjuntar fuentes</a>
+  <a class="sb-link" href="#citas"><span class="sb-num">08</span>Citas verificadas vs sugeridas</a>
+  <a class="sb-link" href="#indice"><span class="sb-num">09</span>Generar el índice</a>
+  <a class="sb-link" href="#secciones"><span class="sb-num">10</span>Generar secciones</a>
+  <a class="sb-link" href="#editar"><span class="sb-num">11</span>Editar el índice</a>
+  <a class="sb-link" href="#glosario"><span class="sb-num">12</span>Glosario académico</a>
+  <a class="sb-link" href="#exportar"><span class="sb-num">13</span>Exportar y copiar</a>
+  <a class="sb-link" href="#faq"><span class="sb-num">14</span>Licencia, FAQ y contacto</a>
+  <div class="sb-footer">
+    <div class="sb-footer-brand">
+      BRB Estrategia &amp; Procesos<br>
+      Soberanía Técnica Ediciones<br>
+      Puerto Madryn · Chubut · Argentina<br>
+      <a href="mailto:bbbarrera1986@gmail.com">bbbarrera1986@gmail.com</a>
+    </div>
+  </div>
+</nav>
+
+<!-- CONTENIDO -->
+<div class="contenido">
+
+<!-- PORTADA -->
+<div class="portada" id="inicio">
+  <div class="portada-eyebrow">Manual de Usuario · BRB Estrategia &amp; Procesos</div>
+  <div class="portada-titulo">Plataforma<br><em>Universitaria</em> BRB</div>
+  <div class="portada-sub">Guía completa para elaborar trabajos académicos universitarios con inteligencia artificial. Perfil institucional persistente, 16 tipos de trabajo, 3 modelos de IA, citas con página exacta verificada e historial de hasta 10 trabajos por dispositivo.</div>
+  <div class="portada-chips">
+    <span class="chip">Para estudiantes universitarios argentinos</span>
+    <span class="chip">40+ universidades reconocidas</span>
+    <span class="chip">v1.0 · Abril 2026</span>
+    <span class="chip">Gemini · GPT · Claude</span>
+    <span class="chip">8.ª herramienta BRB IA</span>
+  </div>
+</div>
+
+<!-- 01 QUÉ ES -->
+<div class="seccion" id="que-es">
+  <div class="sec-num">01 · ¿Qué es?</div>
+  <div class="sec-titulo">Una plataforma que<br><em>conoce dónde estudiás</em></div>
+  <div class="sec-lead">La Plataforma Universitaria BRB es una herramienta de inteligencia artificial diseñada específicamente para estudiantes universitarios argentinos. A diferencia de un chatbot genérico, construye tu perfil académico completo — universidad, carrera, año cursado — y usa ese contexto en cada trabajo que generás.</div>
+
+  <div class="card-grid card-grid-3">
+    <div class="card">
+      <div class="card-icon">🎓</div>
+      <div class="card-title">Perfil institucional</div>
+      <div class="card-desc">Seleccionás tu universidad entre más de 40 instituciones nacionales argentinas. El sistema adapta el contenido generado al contexto de tu institución y carrera.</div>
+      <div class="card-tag">Persistente entre sesiones</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">📎</div>
+      <div class="card-title">Citas con página exacta</div>
+      <div class="card-desc">Adjuntás tu fuente en PDF y el sistema extrae el texto página a página. Las citas generadas incluyen el número de página real del documento.</div>
+      <div class="card-tag">Verificadas desde tu fuente</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">📚</div>
+      <div class="card-title">Historial de trabajos</div>
+      <div class="card-desc">Guardá hasta 10 trabajos en tu dispositivo. Cada uno conserva su progreso, índice, secciones generadas y configuración completa.</div>
+      <div class="card-tag">Máximo 10 · localStorage</div>
+    </div>
+  </div>
+
+  <div class="sec-h3">Flujo general de la plataforma</div>
+  <div class="flujo">
+    <div class="flujo-item"><div class="flujo-num">01</div><div class="flujo-icon">🔑</div><div class="flujo-label">Activar licencia</div></div>
+    <div class="flujo-item"><div class="flujo-num">02</div><div class="flujo-icon">⚙️</div><div class="flujo-label">Configurar claves IA</div></div>
+    <div class="flujo-item"><div class="flujo-num">03</div><div class="flujo-icon">👤</div><div class="flujo-label">Crear perfil</div></div>
+    <div class="flujo-item"><div class="flujo-num">04</div><div class="flujo-icon">📂</div><div class="flujo-label">Historial</div></div>
+    <div class="flujo-item"><div class="flujo-num">05</div><div class="flujo-icon">🧙</div><div class="flujo-label">Wizard 5 pasos</div></div>
+    <div class="flujo-item"><div class="flujo-num">06</div><div class="flujo-icon">⚡</div><div class="flujo-label">Generar trabajo</div></div>
+  </div>
+
+  <div class="tip"><strong>💡 Principio fundamental:</strong> Esta plataforma genera borradores orientativos de alta calidad. El texto producido por la IA debe ser revisado, verificado y editado por el autor antes de cualquier presentación académica. El criterio humano prevalece siempre sobre la generación automática. No presentar texto de IA sin revisión ni declaración.</div>
+</div>
+
+<!-- 02 LICENCIA -->
+<div class="seccion" id="licencia">
+  <div class="sec-num">02 · Activar licencia</div>
+  <div class="sec-titulo">Primer acceso:<br><em>tu código de licencia</em></div>
+  <div class="sec-lead">La plataforma requiere una licencia activa para funcionar. Al ingresar por primera vez, se te pide el código de licencia. El sistema lo verifica contra el servidor de licencias BRB y registra automáticamente tu dispositivo.</div>
+
+  <div class="sec-h3">Pantalla de activación</div>
+  <div class="screen-sim">
+    <div class="screen-sim-bar">
+      <div class="screen-sim-dot" style="background:#333"></div>
+      <div class="screen-sim-dot" style="background:#333"></div>
+      <div class="screen-sim-dot" style="background:var(--oro-dim)"></div>
+      <div class="screen-sim-title">Pantalla de licencia · Primera vez</div>
+    </div>
+    <div class="screen-sim-body">
+      <div class="sec-p">Ingresás tu código en el campo <strong>Código de licencia</strong>. El formato es: <code style="font-family:var(--fm);color:var(--oro);font-size:.82rem">BRB-UNIV-2026-XX01</code></div>
+      <div class="sec-p">Hacés clic en <strong>Activar Licencia →</strong>. El sistema realiza los siguientes controles en secuencia:</div>
+    </div>
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-left"><div class="step-num-box">1</div><div class="step-line"></div></div>
+      <div class="step-body">
+        <div class="step-title">Verificación de existencia</div>
+        <div class="step-desc">El sistema busca el código en la tabla de licencias del servidor BRB. Si no existe, informa el error. Si existe, continúa al paso 2.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-left"><div class="step-num-box">2</div><div class="step-line"></div></div>
+      <div class="step-body">
+        <div class="step-title">Verificación de activación</div>
+        <div class="step-desc">Confirma que el campo <strong>activa = true</strong> en la base de datos. Una licencia desactivada bloquea el acceso aunque el código sea correcto.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-left"><div class="step-num-box">3</div><div class="step-line"></div></div>
+      <div class="step-body">
+        <div class="step-title">Verificación de vigencia</div>
+        <div class="step-desc">Controla que la fecha actual sea anterior a <strong>fecha_vencimiento</strong>. Si la licencia venció, bloquea el acceso e indica que se debe renovar.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-left"><div class="step-num-box">4</div><div class="step-line"></div></div>
+      <div class="step-body">
+        <div class="step-title">Registro de dispositivo</div>
+        <div class="step-desc">Si es el <strong>primer login</strong> (dispositivo_id = NULL), el sistema calcula la huella del dispositivo (SHA-256 de 32 caracteres) y la registra. A partir de ese momento, solo ese dispositivo puede usar esa licencia.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-left"><div class="step-num-box">5</div></div>
+      <div class="step-body">
+        <div class="step-title">Acceso concedido</div>
+        <div class="step-desc">El sistema muestra la fecha de vencimiento y redirige automáticamente a la configuración de claves de IA (si es primera vez) o al historial de trabajos (si ya tenés claves configuradas).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="aviso"><strong>⚠ Un dispositivo por licencia:</strong> La huella del dispositivo se registra en el primer login y no cambia. Si intentás ingresar desde otra computadora o teléfono, el acceso será bloqueado con el mensaje "Esta licencia está registrada en otro dispositivo". Para cambiar de dispositivo, contactá al administrador — el proceso demora menos de 24 horas.</div>
+
+  <div class="info"><strong>🔒 La huella del dispositivo</strong> se calcula localmente usando: userAgent, idioma del navegador, profundidad de color, resolución de pantalla, zona horaria, cantidad de núcleos, plataforma y vendor. No contiene datos personales identificables. No se envía a servidores externos salvo el servidor de licencias BRB para verificación.</div>
+</div>
+
+<!-- 03 CLAVES DE IA -->
+<div class="seccion" id="claves">
+  <div class="sec-num">03 · Claves de IA</div>
+  <div class="sec-titulo">Configurar tus<br><em>modelos de inteligencia artificial</em></div>
+  <div class="sec-lead">La plataforma integra tres modelos de IA. Necesitás al menos una clave activa para generar contenido. Las claves se guardan en el almacenamiento local de tu navegador — nunca salen de tu computadora hacia servidores BRB.</div>
+
+  <table class="tabla">
+    <tr><th>Modelo</th><th>Proveedor</th><th>Formato de clave</th><th>Costo</th><th>Dónde obtenerla</th></tr>
+    <tr>
+      <td>🔷 Gemini 2.5 Flash <span class="badge badge-oro">Recomendado</span></td>
+      <td>Google</td>
+      <td><code style="font-family:var(--fm);font-size:.75rem">AIzaSy...</code></td>
+      <td>Gratuito (plan estándar)</td>
+      <td>aistudio.google.com/apikey</td>
+    </tr>
+    <tr>
+      <td>🟢 GPT-4o-mini</td>
+      <td>OpenAI</td>
+      <td><code style="font-family:var(--fm);font-size:.75rem">sk-...</code></td>
+      <td>Pago por uso (muy bajo)</td>
+      <td>platform.openai.com/api-keys</td>
+    </tr>
+    <tr>
+      <td>🟠 Claude Sonnet</td>
+      <td>Anthropic</td>
+      <td><code style="font-family:var(--fm);font-size:.75rem">sk-ant-...</code></td>
+      <td>Pago por uso</td>
+      <td>console.anthropic.com/settings/keys</td>
+    </tr>
+  </table>
+
+  <div class="sec-h3">Cómo obtener la clave de Gemini (gratuita)</div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-left"><div class="step-num-box">1</div><div class="step-line"></div></div>
+      <div class="step-body"><div class="step-title">Ingresá a Google AI Studio</div><div class="step-desc">Abrí <strong>aistudio.google.com/apikey</strong>. Necesitás una cuenta de Google activa. No requiere tarjeta de crédito.</div></div>
+    </div>
+    <div class="step">
+      <div class="step-left"><div class="step-num-box">2</div><div class="step-line"></div></div>
+      <div class="step-body"><div class="step-title">Creá la key</div><div class="step-desc">Hacé clic en <strong>"Create API key"</strong>. Si no tenés proyecto de Google Cloud, el sistema te guía para crear uno automáticamente (gratuito).</div></div>
+    </div>
+    <div class="step">
+      <div class="step-left"><div class="step-num-box">3</div><div class="step-line"></div></div>
+      <div class="step-body"><div class="step-title">Copiá y pegá</div><div class="step-desc">La key comienza con <strong>AIzaSy...</strong> y tiene aproximadamente 39 caracteres. Pegala en el campo Gemini de la pantalla de configuración de la plataforma.</div></div>
+    </div>
+    <div class="step">
+      <div class="step-left"><div class="step-num-box">4</div></div>
+      <div class="step-body"><div class="step-title">Guardá y continuá</div><div class="step-desc">Hacé clic en <strong>Guardar y Continuar →</strong>. La clave queda almacenada en tu navegador. No necesitás volver a ingresarla en las próximas sesiones.</div></div>
+    </div>
+  </div>
+
+  <div class="tip"><strong>💡 ¿Cuántos trabajos por día?</strong> Con el plan gratuito de Gemini Flash (250 requests/día), podés generar entre 3 y 5 trabajos completos de extensión media por día. Para uso intensivo, activá la facturación en Google Cloud — el costo por trabajo es inferior a $0.01 USD.</div>
+  <div class="info"><strong>ℹ Omitir por ahora:</strong> Si todavía no tenés clave, podés hacer clic en <strong>Omitir por ahora</strong> para acceder al perfil y al historial. No podrás generar contenido hasta configurar al menos una clave.</div>
+</div>
+
+<!-- 04 PERFIL -->
+<div class="seccion" id="perfil">
+  <div class="sec-num">04 · Tu perfil universitario</div>
+  <div class="sec-titulo">El contexto que<br><em>personaliza todo</em></div>
+  <div class="sec-lead">El perfil universitario es el núcleo diferenciador de esta plataforma. Los datos que cargás aquí se incorporan al prompt de cada sección generada — el modelo de IA sabe en qué institución estudiás, qué carrera cursás y en qué año estás.</div>
+
+  <div class="sec-h4">Campos del perfil</div>
+  <table class="tabla">
+    <tr><th>Campo</th><th>Descripción</th><th>Comportamiento</th></tr>
+    <tr><td><strong>Nombre completo</strong></td><td>Tu nombre y apellido</td><td>Aparece en el encabezado del trabajo generado</td></tr>
+    <tr><td><strong>DNI / Legajo</strong></td><td>Número de legajo o DNI</td><td>Opcional · Aparece en el encabezado si se completa</td></tr>
+    <tr><td><strong>Universidad</strong></td><td>Selección de lista de 40+ instituciones</td><td>Alimenta el prompt de contexto institucional</td></tr>
+    <tr><td><strong>Carrera</strong></td><td>Texto libre — nombre de tu carrera</td><td>Activa el autocompletado del área disciplinar</td></tr>
+    <tr><td><strong>Año / Nivel cursado</strong></td><td>1er año hasta Doctorado</td><td>Define la profundidad y tono del contenido generado</td></tr>
+    <tr><td><strong>Área disciplinar</strong></td><td>10 áreas predefinidas</td><td>Determina la norma de cita autodetectada</td></tr>
+    <tr><td><strong>Materia / Cátedra</strong></td><td>Nombre de la materia actual</td><td>Opcional · Se autocompleta en el wizard</td></tr>
+  </table>
+
+  <div class="sec-h3">Autodetección de área disciplinar</div>
+  <div class="sec-p">Al escribir el nombre de tu carrera, el sistema detecta automáticamente el área disciplinar usando coincidencia de palabras clave. Si escribís "Medicina" o "Enfermería", selecciona <strong>Ciencias de la Salud</strong>. Si escribís "Ingeniería Industrial", selecciona <strong>Ingeniería y Tecnología</strong>. Podés modificarlo manualmente si la detección automática no es correcta.</div>
+
+  <div class="sec-h3">Norma de cita autodetectada por área</div>
+  <table class="tabla">
+    <tr><th>Área disciplinar</th><th>Norma detectada</th><th>Motivo</th></tr>
+    <tr><td>Ciencias de la Salud</td><td><span class="badge badge-ok">Vancouver</span></td><td>Estándar internacional para ciencias biomédicas</td></tr>
+    <tr><td>Ciencias Sociales y Humanas</td><td><span class="badge badge-navy">APA 7</span></td><td>Norma universal en ciencias sociales</td></tr>
+    <tr><td>Ciencias Exactas y Naturales</td><td><span class="badge badge-navy">APA 7</span></td><td>Adoptado en ciencias básicas</td></tr>
+    <tr><td>Ingeniería y Tecnología</td><td><span class="badge badge-oro">IEEE</span></td><td>Estándar internacional en ingeniería</td></tr>
+    <tr><td>Ciencias Económicas</td><td><span class="badge badge-navy">APA 7</span></td><td>Predominante en economía y administración</td></tr>
+    <tr><td>Derecho</td><td><span class="badge badge-oro">Chicago 17</span></td><td>Norma estándar en ciencias jurídicas</td></tr>
+    <tr><td>Arquitectura y Diseño</td><td><span class="badge badge-navy">APA 7</span></td><td>Adoptado en arquitectura y urbanismo</td></tr>
+    <tr><td>Agronomía y Veterinaria</td><td><span class="badge badge-ok">Vancouver</span></td><td>Ciencias biológicas aplicadas</td></tr>
+    <tr><td>Educación</td><td><span class="badge badge-navy">APA 7</span></td><td>Estándar en ciencias de la educación</td></tr>
+    <tr><td>Arte y Comunicación</td><td><span class="badge badge-oro">MLA 9</span></td><td>Norma para humanidades y artes</td></tr>
+  </table>
+
+  <div class="tip"><strong>💡 El perfil se guarda automáticamente</strong> en tu dispositivo. Cada nuevo trabajo que creás hereda tu universidad, carrera y materia sin necesidad de volver a configurarlo. Podés editarlo en cualquier momento desde el botón "Perfil" en el encabezado.</div>
+</div>
+
+<!-- 05 HISTORIAL -->
+<div class="seccion" id="historial">
+  <div class="sec-num">05 · Historial de trabajos</div>
+  <div class="sec-titulo">Tus trabajos<br><em>siempre disponibles</em></div>
+  <div class="sec-lead">El historial muestra todos los trabajos guardados en tu dispositivo, con información de progreso, fecha de última edición, modelo de IA utilizado y cantidad de palabras generadas. Podés tener hasta 10 trabajos simultáneos.</div>
+
+  <div class="sec-h4">Información que muestra cada trabajo</div>
+  <ul class="lista">
+    <li><strong>Ícono y tipo</strong> — identifica visualmente el tipo de trabajo (monografía, TP, tesis, etc.)</li>
+    <li><strong>Título</strong> — el tema o título que ingresaste en el wizard</li>
+    <li><strong>Fecha de última edición</strong> — cuándo fue la última generación de contenido</li>
+    <li><strong>Estilo de cita y modelo IA</strong> — chips informativos de configuración</li>
+    <li><strong>Progreso</strong> — secciones generadas vs total del índice (ej: 8/14 · 57%)</li>
+    <li><strong>Palabras generadas</strong> — contador total acumulado de todas las secciones</li>
+  </ul>
+
+  <div class="sec-h4">Acciones disponibles por trabajo</div>
+  <ul class="lista">
+    <li><strong>Clic en la tarjeta o "Continuar"</strong> — abre el trabajo en el editor principal, exactamente en el estado donde lo dejaste</li>
+    <li><strong>✕ Eliminar</strong> — elimina el trabajo del historial permanentemente. Esta acción no se puede deshacer.</li>
+    <li><strong>+ Crear nuevo trabajo</strong> — inicia el wizard de configuración para un trabajo nuevo</li>
+    <li><strong>🗑 Limpiar todo</strong> — elimina todos los trabajos del historial. Requiere confirmación.</li>
+  </ul>
+
+  <div class="aviso"><strong>⚠ Límite de 10 trabajos:</strong> Al crear el undécimo trabajo, el sistema elimina automáticamente el más antiguo del historial. Si querés conservar un trabajo antes de que sea desplazado, descargalo en .txt desde el editor o copiá el contenido.</div>
+  <div class="info"><strong>ℹ Almacenamiento local:</strong> Los trabajos se guardan en el localStorage de tu navegador. Si borrás los datos del navegador, limpiás el caché o usás modo incógnito, los trabajos se perderán. Usá siempre el mismo navegador en el mismo dispositivo.</div>
+</div>
+
+<!-- 06 WIZARD -->
+<div class="seccion" id="wizard">
+  <div class="sec-num">06 · El wizard de configuración</div>
+  <div class="sec-titulo">5 pasos para<br><em>definir tu trabajo</em></div>
+  <div class="sec-lead">El wizard es la pantalla de configuración que completás una vez por trabajo. Sus respuestas determinan el tipo de índice, el estilo del contenido, la profundidad, el formato de cita y el modelo de IA que se usará. Todos los datos del perfil se incorporan automáticamente al contexto.</div>
+
+  <div class="sec-h4">Paso 1 — Tipo de trabajo</div>
+  <div class="sec-p">Seleccionás el tipo de documento. Cada tipo genera una estructura específica diferente:</div>
+  <table class="tabla">
+    <tr><th>Tipo</th><th>Descripción</th><th>Estructura típica</th></tr>
+    <tr><td>📄 Monografía</td><td>Exploración temática de un tema</td><td>Intro · Desarrollo · Conclusión · Bibliografía</td></tr>
+    <tr><td>📝 Trabajo Práctico</td><td>TP individual o grupal</td><td>Consigna · Marco teórico · Desarrollo · Conclusión</td></tr>
+    <tr><td>🔬 Informe de Laboratorio</td><td>Experimental / técnico</td><td>Objetivos · Materiales · Metodología · Resultados · Discusión</td></tr>
+    <tr><td>🔍 Trabajo de Investigación</td><td>Con hipótesis y método</td><td>Planteamiento · Marco teórico · Metodología · Resultados · Conclusión</td></tr>
+    <tr><td>✍️ Ensayo Académico</td><td>Argumentativo / crítico</td><td>Tesis · Argumentos · Contraargumentos · Conclusión</td></tr>
+    <tr><td>🎯 Proyecto de Investigación</td><td>Protocolo / propuesta</td><td>Problema · Justificación · Objetivos · Metodología · Cronograma</td></tr>
+    <tr><td>📚 Revisión Bibliográfica</td><td>Estado del arte</td><td>Estrategia de búsqueda · Análisis por categorías · Síntesis</td></tr>
+    <tr><td>📋 Resumen / Síntesis</td><td>Compresión de material</td><td>Ideas principales · Síntesis · Reflexión final</td></tr>
+    <tr><td>🏥 Caso Clínico / Estudio de Caso</td><td>Análisis situacional</td><td>Presentación del caso · Análisis · Marco teórico · Conclusión</td></tr>
+    <tr><td>📊 Plan de Negocios</td><td>Empresarial / económico</td><td>Resumen ejecutivo · Análisis de mercado · Plan financiero</td></tr>
+    <tr><td>🎓 Trabajo Final de Carrera</td><td>TFC / Tesina</td><td>Estructura completa de investigación con anexos</td></tr>
+    <tr><td>📗 Tesis de Grado</td><td>Licenciatura</td><td>Estructura formal de tesis con todas las secciones reglamentarias</td></tr>
+    <tr><td>🏢 Informe de Práctica Profesional</td><td>Pasantía / residencia</td><td>Institución · Actividades · Análisis · Aprendizajes</td></tr>
+    <tr><td>📐 Protocolo de Investigación</td><td>Diseño metodológico</td><td>Problema · Hipótesis · Diseño · Población · Instrumentos</td></tr>
+    <tr><td>⚖️ Análisis Jurídico / Dictamen</td><td>Jurisprudencia / dictamen</td><td>Hechos · Marco normativo · Análisis · Conclusión jurídica</td></tr>
+    <tr><td>⚙️ Informe Técnico</td><td>Ingeniería / arquitectura</td><td>Descripción técnica · Análisis · Especificaciones · Conclusión</td></tr>
+  </table>
+
+  <div class="sec-h4">Paso 2 — Datos del trabajo</div>
+  <ul class="lista">
+    <li><strong>Título o tema:</strong> No tiene que ser el título definitivo. Cuanto más específico, mejor será el índice generado.</li>
+    <li><strong>Materia / Cátedra:</strong> Se autocompleta desde tu perfil. Podés modificarlo para este trabajo específico.</li>
+    <li><strong>Docente responsable:</strong> Opcional. Si lo ingresás, aparece en el encabezado del trabajo generado.</li>
+  </ul>
+
+  <div class="sec-h4">Paso 3 — Estructura</div>
+  <ul class="lista">
+    <li><strong>Extensión corta:</strong> ~300 palabras por sección · 5 a 15 páginas estimadas</li>
+    <li><strong>Extensión media:</strong> ~600 palabras por sección · 15 a 40 páginas estimadas</li>
+    <li><strong>Extensión extensa:</strong> ~1000 palabras por sección · más de 40 páginas estimadas</li>
+    <li><strong>Estilo de cita:</strong> Se preselecciona la norma detectada para tu área. Podés cambiarlo libremente entre APA 7, Vancouver, Chicago 17, IEEE, ICONTEC, MLA 9 o Sin estilo.</li>
+  </ul>
+
+  <div class="sec-h4">Paso 4 — Modelo de IA y fuentes</div>
+  <div class="sec-p">Seleccionás el modelo de IA para este trabajo. Solo aparecen habilitados los modelos con clave configurada. En el mismo paso, podés adjuntar tu fuente bibliográfica en PDF o DOCX. Ver sección 07 para el detalle completo del manejo de adjuntos.</div>
+
+  <div class="sec-h4">Paso 5 — Contexto adicional</div>
+  <div class="sec-p">Describís el problema de investigación, hipótesis, enfoque o cualquier dato específico que quieras que la IA incorpore. También podés ingresar los requisitos específicos del docente (cantidad de fuentes, secciones obligatorias, formato de entrega).</div>
+  <div class="tip"><strong>💡 Ejemplo de buen contexto:</strong> "Este trabajo analiza la prevalencia de anemia ferropénica en niños de 2 a 5 años en comunidades rurales de la provincia del Chubut, evaluando el acceso a controles pediátricos según datos del Ministerio de Salud 2023. La hipótesis plantea que la distancia geográfica a centros de salud es el principal determinante de la falta de diagnóstico oportuno."</div>
+</div>
+
+<!-- 07 ADJUNTOS -->
+<div class="seccion" id="adjuntos">
+  <div class="sec-num">07 · Adjuntar fuentes bibliográficas</div>
+  <div class="sec-titulo">Tu fuente como<br><em>base del trabajo</em></div>
+  <div class="sec-lead">En el paso 4 del wizard podés adjuntar un documento PDF o DOCX como fuente bibliográfica. El sistema procesa el archivo, extrae el texto y lo usa como contexto real para la generación. El tratamiento difiere significativamente según el formato.</div>
+
+  <div class="sec-h3">Formatos aceptados y comportamiento</div>
+  <table class="tabla">
+    <tr><th>Formato</th><th>Extracción</th><th>Paginación</th><th>Modo de cita</th></tr>
+    <tr>
+      <td>PDF</td>
+      <td>Texto completo con PDF.js</td>
+      <td>✅ Sí — página a página, marcadas como [PÁGINA N]</td>
+      <td><span class="badge badge-ok">Verificado</span> — cita con página exacta</td>
+    </tr>
+    <tr>
+      <td>DOC / DOCX</td>
+      <td>Texto completo con Mammoth</td>
+      <td>❌ No — el formato DOCX no preserva paginación</td>
+      <td><span class="badge badge-warn">Sugerido</span> — referencia sin número de página</td>
+    </tr>
+  </table>
+
+  <div class="sec-h3">Límites de procesamiento</div>
+  <ul class="lista">
+    <li>Máximo <strong>20.000 caracteres</strong> extraídos por documento. Si el archivo es más largo, se recorta automáticamente desde el inicio.</li>
+    <li>El contador de caracteres extraídos se muestra junto al nombre del archivo una vez procesado.</li>
+    <li>Podés quitar el archivo adjunto con el botón <strong>✕ Quitar</strong> y subir otro en su lugar.</li>
+    <li>Solo se puede adjuntar una fuente por trabajo. Para múltiples fuentes, combiná el contenido en un único PDF antes de subirlo.</li>
+  </ul>
+
+  <div class="sec-h3">Cómo adjuntar el archivo</div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-left"><div class="step-num-box">1</div><div class="step-line"></div></div>
+      <div class="step-body"><div class="step-title">Clic en la zona de carga o arrastrar</div><div class="step-desc">La zona de carga acepta arrastrar y soltar el archivo directamente desde el explorador de archivos de tu sistema operativo.</div></div>
+    </div>
+    <div class="step">
+      <div class="step-left"><div class="step-num-box">2</div><div class="step-line"></div></div>
+      <div class="step-body"><div class="step-title">Procesamiento automático</div><div class="step-desc">El sistema extrae el texto. Para PDFs, indexa el contenido por página numerada. El proceso demora entre 2 y 15 segundos según el tamaño.</div></div>
+    </div>
+    <div class="step">
+      <div class="step-left"><div class="step-num-box">3</div></div>
+      <div class="step-body"><div class="step-title">Confirmación del modo de cita</div><div class="step-desc">Aparece un badge verde (<strong>Citas verificadas disponibles</strong>) para PDF, o amarillo (<strong>Citas como referencia sugerida</strong>) para DOCX. Este indicador determina cómo se generan las citas en todo el trabajo.</div></div>
+    </div>
+  </div>
+
+  <div class="aviso"><strong>⚠ El archivo no sale de tu dispositivo:</strong> El procesamiento del PDF o DOCX ocurre íntegramente en tu navegador. El texto extraído se almacena en el localStorage de tu dispositivo y se incorpora al prompt enviado al modelo de IA que hayas seleccionado. BRB no recibe ni almacena el contenido de tus archivos.</div>
+</div>
+
+<!-- 08 CITAS -->
+<div class="seccion" id="citas">
+  <div class="sec-num">08 · Citas verificadas vs sugeridas</div>
+  <div class="sec-titulo">La diferencia que<br><em>define la integridad</em></div>
+  <div class="sec-lead">El sistema de citas de esta plataforma distingue explícitamente entre dos modos. Esta distinción es la característica más crítica para la integridad académica del trabajo generado.</div>
+
+  <div class="cita-compare">
+    <div class="cita-box verified">
+      <div class="cita-header">✓ MODO VERIFICADO — Con PDF adjunto</div>
+      <div class="cita-texto">"La prevalencia de complicaciones postoperatorias en pacientes con diabetes mellitus tipo 2 no controlada supera el 34% en los primeros 30 días según los registros del servicio de cirugía..."</div>
+      <div class="cita-ref">(Rodríguez &amp; Méndez, 2022, p. 47) — Fuente: Cirugia_Clinica_2022.pdf</div>
+    </div>
+    <div class="cita-box suggested">
+      <div class="cita-header">⚠ MODO SUGERIDO — Sin fuente adjunta</div>
+      <div class="cita-texto">"La evidencia epidemiológica señala una correlación directa entre el control glucémico preoperatorio y la reducción de complicaciones postquirúrgicas en pacientes con diabetes tipo 2..."</div>
+      <div class="cita-ref">[referencia sugerida — verificar página en fuente original]</div>
+    </div>
+  </div>
+
+  <div class="sec-h3">Cómo se generan las citas en cada modo</div>
+  <div class="sec-h4">Modo verificado (PDF adjunto)</div>
+  <ul class="lista">
+    <li>El prompt instruye al modelo a citar usando el texto marcado como <strong>[PÁGINA N]</strong> en el contenido extraído</li>
+    <li>La cita incluye autor, año y número de página en el formato exacto del estilo seleccionado</li>
+    <li>Al final de cada sección se incluye la referencia bibliográfica completa del documento adjunto</li>
+    <li>Las citas sin fuente verificable se marcan como <strong>[referencia sugerida]</strong> para distinguirlas</li>
+  </ul>
+
+  <div class="sec-h4">Modo sugerido (sin fuente o con DOCX)</div>
+  <ul class="lista">
+    <li>El modelo puede incluir referencias académicas típicas del área disciplinar</li>
+    <li>Todas las citas se marcan explícitamente como <strong>[referencia sugerida — verificar en fuente original]</strong></li>
+    <li>El sistema nunca inventa ISBN, volúmenes ni páginas específicas sin verificación</li>
+    <li>Un badge amarillo de advertencia aparece al pie de cada sección generada en modo sugerido</li>
+  </ul>
+
+  <div class="aviso"><strong>⚠ Responsabilidad del autor:</strong> Incluso en modo verificado, el autor debe confirmar que las citas generadas corresponden efectivamente al texto de la fuente adjunta. La IA puede cometer errores de atribución. Verificá siempre contra el documento original antes de presentar el trabajo.</div>
+</div>
+
+<!-- 09 INDICE -->
+<div class="seccion" id="indice">
+  <div class="sec-num">09 · Generar el índice</div>
+  <div class="sec-titulo">La estructura<br><em>antes del contenido</em></div>
+  <div class="sec-lead">El índice es el primer paso antes de generar contenido. Define qué secciones tendrá el trabajo y en qué orden. La IA genera entre 15 y 28 ítems numerados adaptados a tu tipo de trabajo, institución y carrera.</div>
+
+  <div class="sec-h3">Cómo generar el índice</div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-left"><div class="step-num-box">1</div><div class="step-line"></div></div>
+      <div class="step-body"><div class="step-title">Clic en "⚡ Generar Índice"</div><div class="step-desc">El botón está en la barra de herramientas superior derecha del editor. Al hacer clic, el sistema envía el perfil completo, el tipo de trabajo, el título y el contexto al modelo de IA seleccionado.</div></div>
+    </div>
+    <div class="step">
+      <div class="step-left"><div class="step-num-box">2</div><div class="step-line"></div></div>
+      <div class="step-body"><div class="step-title">Esperar la respuesta</div><div class="step-desc">La barra de carga animada indica que se está procesando. El tiempo varía entre 5 y 20 segundos según el modelo y la carga del servidor.</div></div>
+    </div>
+    <div class="step">
+      <div class="step-left"><div class="step-num-box">3</div><div class="step-line"></div></div>
+      <div class="step-body"><div class="step-title">Revisar el índice generado</div><div class="step-desc">El índice aparece en la barra lateral izquierda. Leelo completo antes de generar secciones. Es el momento de corregir, agregar o eliminar ítems. Ver sección 11 para cómo editar el índice.</div></div>
+    </div>
+    <div class="step">
+      <div class="step-left"><div class="step-num-box">4</div></div>
+      <div class="step-body"><div class="step-title">Confirmar y generar secciones</div><div class="step-desc">Una vez que el índice refleja la estructura deseada, podés generar las secciones individualmente o todas en secuencia con el botón <strong>⚡ Todo</strong>.</div></div>
+    </div>
+  </div>
+
+  <div class="tip"><strong>💡 El índice como contexto global:</strong> Cuando generás cada sección, el índice completo se incluye en el prompt. Esto permite que el modelo conozca la estructura total del trabajo y mantenga coherencia temática entre capítulos — sin repetir ni omitir información que debería aparecer en otra sección.</div>
+  <div class="sec-p"><strong>Regenerar el índice:</strong> Podés hacer clic en <strong>⚡ Regenerar Índice</strong> en cualquier momento. Esto genera un nuevo índice descartando el anterior. Las secciones ya generadas basadas en el índice previo se conservan hasta que edites el índice manualmente.</div>
+</div>
+
+<!-- 10 SECCIONES -->
+<div class="seccion" id="secciones">
+  <div class="sec-num">10 · Generar secciones</div>
+  <div class="sec-titulo">Cada capítulo,<br><em>con coherencia global</em></div>
+  <div class="sec-lead">Una vez generado el índice, podés generar el contenido de cada sección individualmente o todas en secuencia. Cada sección se genera con el contexto completo: perfil, índice total, secciones anteriores y fuente adjunta.</div>
+
+  <div class="sec-h4">Generar una sección individual</div>
+  <ul class="lista">
+    <li>En la barra lateral, hacé clic en el nombre de la sección → la tarjeta se resalta en el panel principal</li>
+    <li>En la tarjeta de la sección, hacé clic en el botón <strong>⚡ Generar</strong></li>
+    <li>La barra de carga animada indica procesamiento · El tiempo varía entre 10 y 40 segundos según extensión</li>
+    <li>Al completarse, el texto aparece en la tarjeta · El contador de palabras se actualiza · La barra de progreso avanza</li>
+  </ul>
+
+  <div class="sec-h4">Generar todo el trabajo en secuencia</div>
+  <div class="sec-p">El botón <strong>⚡ Todo</strong> en la barra lateral genera todas las secciones pendientes en orden secuencial, con una pausa de 1,2 segundos entre cada una para respetar los límites de la API. No interrumpas el proceso — si cerrás la ventana, la generación se detiene y el contenido hasta ese momento queda guardado.</div>
+
+  <div class="sec-h4">Acciones disponibles por sección generada</div>
+  <table class="tabla">
+    <tr><th>Acción</th><th>Descripción</th></tr>
+    <tr><td>📋 Copiar</td><td>Copia el texto de esa sección al portapapeles</td></tr>
+    <tr><td>↺ Regen</td><td>Regenera esa sección descartando el contenido actual. Requiere confirmación.</td></tr>
+    <tr><td>Contador de palabras</td><td>Muestra la cantidad de palabras generadas en esa sección</td></tr>
+  </table>
+
+  <div class="sec-h3">Contexto que recibe el modelo por sección</div>
+  <ul class="lista">
+    <li><strong>Perfil completo:</strong> universidad, carrera, año, área disciplinar</li>
+    <li><strong>Datos del trabajo:</strong> tipo, título, materia, docente, extensión, estilo de cita</li>
+    <li><strong>Índice completo:</strong> todas las secciones numeradas en orden</li>
+    <li><strong>Contexto previo:</strong> fragmentos de las últimas 2 secciones ya generadas</li>
+    <li><strong>Fuente adjunta:</strong> texto extraído del PDF/DOCX con paginación (hasta 8.000 caracteres)</li>
+    <li><strong>Instrucciones de cita:</strong> formato exacto según el modo verificado o sugerido</li>
+    <li><strong>Instrucciones del docente:</strong> requisitos específicos ingresados en el paso 5 del wizard</li>
+  </ul>
+</div>
+
+<!-- 11 EDITAR INDICE -->
+<div class="seccion" id="editar">
+  <div class="sec-num">11 · Editar el índice</div>
+  <div class="sec-titulo">Ajustá la estructura<br><em>antes de generar</em></div>
+  <div class="sec-lead">El índice generado por la IA es una propuesta — no un dictado. Antes de generar el contenido de las secciones, revisalo y ajustalo para que refleje exactamente lo que tu docente requiere o lo que tu investigación demanda.</div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-left"><div class="step-num-box">1</div><div class="step-line"></div></div>
+      <div class="step-body"><div class="step-title">Clic en "✏ Editar"</div><div class="step-desc">El botón está en el encabezado de la barra lateral. Al hacer clic, el índice visual se reemplaza por un área de texto editable.</div></div>
+    </div>
+    <div class="step">
+      <div class="step-left"><div class="step-num-box">2</div><div class="step-line"></div></div>
+      <div class="step-body">
+        <div class="step-title">Editar el texto del índice</div>
+        <div class="step-desc">El formato del índice es: un ítem por línea. Capítulos principales con número y punto: <code style="font-family:var(--fm);font-size:.78rem">1. TITULO</code>. Subcapítulos con dos números: <code style="font-family:var(--fm);font-size:.78rem">1.1 Subtítulo</code>.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-left"><div class="step-num-box">3</div></div>
+      <div class="step-body"><div class="step-title">Clic en "✓ Aplicar cambios al índice"</div><div class="step-desc">El sistema parsea el nuevo índice, actualiza la barra lateral y regenera las tarjetas de secciones. Las secciones que ya tenían contenido generado y cuyo título coincide exactamente se conservan. Las secciones renombradas o eliminadas pierden su contenido.</div></div>
+    </div>
+  </div>
+
+  <div class="aviso"><strong>⚠ Renombrar secciones elimina su contenido:</strong> Si una sección ya tenía texto generado y la renombrás (aunque sea un carácter distinto), el sistema la trata como una sección nueva y el contenido anterior se pierde. Si querés conservar el texto, copialo antes de renombrar.</div>
+
+  <div class="code-label">Ejemplo de índice correctamente formateado</div>
+  <div class="code-block">1. INTRODUCCIÓN
+1.1 Planteamiento del problema
+1.2 Justificación
+1.3 Objetivos
+2. MARCO TEÓRICO
+2.1 Antecedentes del tema
+2.2 Bases conceptuales
+3. METODOLOGÍA
+3.1 Tipo de estudio
+3.2 Población y muestra
+3.3 Instrumentos de recolección
+4. RESULTADOS Y DISCUSIÓN
+5. CONCLUSIONES
+6. BIBLIOGRAFÍA</div>
+</div>
+
+<!-- 12 GLOSARIO -->
+<div class="seccion" id="glosario">
+  <div class="sec-num">12 · Glosario académico</div>
+  <div class="sec-titulo">Términos de<br><em>tu área disciplinar</em></div>
+  <div class="sec-lead">La plataforma incluye un glosario de términos académicos específicos para cada área disciplinar. El glosario se carga desde una base hardcodeada y se enriquece automáticamente con términos adicionales generados por IA según tu carrera específica.</div>
+
+  <div class="sec-h4">Cómo acceder al glosario</div>
+  <ul class="lista">
+    <li>Desde el <strong>encabezado principal</strong> — botón <strong>📖 Glosario</strong> disponible en todas las pantallas</li>
+    <li>Desde la pantalla de <strong>perfil</strong> — botón <strong>📖 Glosario</strong> en la sección de acciones</li>
+    <li>Al cerrar el glosario, volvés automáticamente a la pantalla desde donde lo abriste</li>
+  </ul>
+
+  <div class="sec-h4">Áreas con glosario base incluido</div>
+  <ul class="lista">
+    <li><strong>Ciencias de la Salud:</strong> anamnesis, epidemiología, patogenia, prevalencia, incidencia, diagnóstico diferencial, fisiopatología, profilaxis</li>
+    <li><strong>Ciencias Sociales y Humanas:</strong> epistemología, paradigma, etnografía, hermenéutica, fenomenología, dialéctica</li>
+    <li><strong>Ingeniería y Tecnología:</strong> prototipo, tolerancia, redundancia, fatiga de materiales, diagrama de Gantt, calibración</li>
+    <li><strong>Ciencias Económicas:</strong> elasticidad, ceteris paribus, externalidad, curva de Lorenz, coeficiente de Gini</li>
+    <li><strong>Derecho:</strong> jurisprudencia, locus standi, in dubio pro reo, nulidad procesal, prescripción</li>
+  </ul>
+
+  <div class="sec-h4">Enriquecimiento con IA</div>
+  <div class="sec-p">Si tenés al menos una clave de IA configurada, al abrir el glosario el sistema genera automáticamente 20 términos adicionales específicos para tu carrera (no solo el área — sino tu carrera exacta). Estos se fusionan con la base evitando duplicados. El proceso ocurre en segundo plano mientras ves los términos base.</div>
+
+  <div class="sec-h4">Búsqueda en el glosario</div>
+  <div class="sec-p">El campo de búsqueda filtra en tiempo real tanto por término como por definición. La búsqueda no distingue mayúsculas ni tildes.</div>
+</div>
+
+<!-- 13 EXPORTAR -->
+<div class="seccion" id="exportar">
+  <div class="sec-num">13 · Exportar y copiar</div>
+  <div class="sec-titulo">Llevate tu trabajo<br><em>donde necesitás</em></div>
+  <div class="sec-lead">El trabajo generado puede copiarse al portapapeles o descargarse como archivo de texto plano. El archivo incluye encabezado completo con todos los datos del perfil, la configuración del trabajo y el modo de cita aplicado.</div>
+
+  <div class="sec-h4">Opciones de exportación</div>
+  <table class="tabla">
+    <tr><th>Acción</th><th>Resultado</th><th>Cuándo usarla</th></tr>
+    <tr><td>📋 Copiar todo</td><td>Copia el trabajo completo al portapapeles</td><td>Para pegar directamente en Word, Google Docs o cualquier procesador de texto</td></tr>
+    <tr><td>⬇ .TXT</td><td>Descarga el archivo como texto plano (.txt)</td><td>Para guardar una copia local antes de editar o antes de crear un nuevo trabajo</td></tr>
+    <tr><td>📋 (por sección)</td><td>Copia solo esa sección al portapapeles</td><td>Para trabajar sección por sección en el procesador de texto</td></tr>
+  </table>
+
+  <div class="sec-h3">Estructura del archivo exportado</div>
+  <div class="code-block">MONOGRAFÍA
+[Título del trabajo]
+════════════════════════════════════════════════════════════
+Universidad: Universidad Nacional de la Patagonia Austral
+Carrera: Licenciatura en Enfermería
+Año: 3er año
+Estudiante: [Nombre] · Legajo: [Número]
+Materia: Epidemiología Clínica
+Docente: Dra. [Nombre]
+Estilo de cita: Vancouver · Modelo IA: GEMINI
+✓ Citas con página verificada desde: fuente.pdf
+Generado: 24/04/2026 — BRB Plataforma Universitaria
+════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════
+1. INTRODUCCIÓN
+────────────────────────────────────────────────────────────
+
+[Texto de la sección...]</div>
+
+  <div class="tip"><strong>💡 Flujo recomendado:</strong> Generá todas las secciones → Exportá en .txt → Abrí el archivo en Word o Google Docs → Aplicá el formato requerido por tu institución (márgenes, interlineado, fuente) → Revisá y editá el contenido → Verificá las citas contra las fuentes originales → Presentá.</div>
+  <div class="aviso"><strong>⚠ El .txt no incluye formato:</strong> El archivo exportado es texto plano sin estilos, fuentes ni márgenes. Toda la presentación visual del documento final (formato APA, portada, numeración de páginas, encabezados) debe aplicarse manualmente en el procesador de texto que uses para la presentación final.</div>
+</div>
+
+<!-- 14 LICENCIA FAQ CONTACTO -->
+<div class="seccion" id="faq">
+  <div class="sec-num">14 · Licencia, FAQ y contacto</div>
+  <div class="sec-titulo">Lo que incluye<br><em>tu licencia</em></div>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon">✅</div>
+      <div class="card-title">Incluido en la licencia</div>
+      <div class="card-desc">Acceso completo a los 16 tipos de trabajo durante el período contratado. Un usuario, un dispositivo. Todos los modelos de IA configurables. Historial de 10 trabajos. Glosario académico. Sin límite de generaciones (limitado solo por los planes de la API).</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">❌</div>
+      <div class="card-title">No incluido</div>
+      <div class="card-desc">El costo de las APIs de IA corre por cuenta del usuario (Gemini es gratuita con plan estándar). No incluye soporte para cambio de dispositivo sin autorización. No incluye historial de versiones de secciones. No incluye guardado en la nube.</div>
+    </div>
+  </div>
+
+  <div class="sec-h3">Condiciones de la licencia</div>
+  <ul class="lista">
+    <li>La licencia es <strong>individual e intransferible</strong> — no podés compartir tus credenciales</li>
+    <li>El acceso está ligado a <strong>un único dispositivo</strong> registrado en el primer login</li>
+    <li>La licencia tiene <strong>fecha de vencimiento</strong> — al vencer, el acceso se bloquea automáticamente</li>
+    <li>Para renovar, contactás al administrador por email antes del vencimiento</li>
+    <li>Para cambiar de dispositivo, contactás al administrador — el proceso demora menos de 24 horas</li>
+  </ul>
+
+  <div class="sec-h3">Preguntas frecuentes</div>
+
+  <div class="sec-h4">¿Puedo usar el trabajo generado directamente?</div>
+  <div class="sec-p">No sin revisión. El texto generado es un <strong>borrador orientativo</strong> que requiere revisión, edición y verificación de fuentes. Presentar texto generado por IA sin edición ni declaración puede constituir una falta de integridad académica según las políticas de tu institución.</div>
+
+  <div class="sec-h4">¿En qué se diferencia de usar ChatGPT directamente?</div>
+  <div class="sec-p">La diferencia principal es el contexto. ChatGPT no sabe que estudiás en la UNPA ni que cursás Enfermería — genera contenido genérico. Esta plataforma incorpora tu institución, carrera y año en cada sección. Además, gestiona el índice como contexto global para mantener coherencia, controla el estilo de cita por área y distingue citas verificadas de sugeridas.</div>
+
+  <div class="sec-h4">¿Se guarda mi API Key en algún servidor?</div>
+  <div class="sec-p">No. Las API Keys se almacenan únicamente en el localStorage de tu navegador. Nunca salen de tu computadora hacia servidores de BRB. Las llamadas a Gemini, GPT o Claude van directamente desde tu navegador al proveedor correspondiente.</div>
+
+  <div class="sec-h4">¿Qué pasa si cierro la ventana mientras genera?</div>
+  <div class="sec-p">La generación se interrumpe. El contenido ya generado hasta ese momento está guardado en el localStorage. Al volver a ingresar, el trabajo se recupera en el estado en que quedó. Las secciones no generadas quedan pendientes con el botón ⚡ Generar disponible.</div>
+
+  <div class="sec-h4">¿Puedo cambiar el modelo de IA después de generar algunas secciones?</div>
+  <div class="sec-p">No desde el editor — el modelo se configura en el wizard. Para cambiar de modelo, creá un trabajo nuevo con el wizard. Las secciones ya generadas en el trabajo anterior permanecen en el historial.</div>
+
+  <div class="sec-h4">¿Qué diferencia hay entre esta plataforma y el Generador de Tesis BRB?</div>
+  <div class="sec-p">El Generador de Tesis está especializado en trabajos de investigación extensa (tesis de grado, posgrado, monografía larga). Esta plataforma cubre todos los tipos de trabajo universitario argentino con perfil institucional persistente. Son herramientas complementarias del mismo ecosistema BRB IA.</div>
+
+  <div class="sec-h4">¿El historial se borra si limpio el navegador?</div>
+  <div class="sec-p">Sí. Los trabajos se guardan en el localStorage, que se elimina al limpiar datos del navegador o al usar modo incógnito. Siempre usá el mismo navegador y descargá los trabajos importantes antes de limpiar datos.</div>
+
+  <div class="sec-h4">¿Funciona en el celular?</div>
+  <div class="sec-p">La plataforma es funcional en dispositivos móviles pero está optimizada para escritorio. En pantallas pequeñas el sidebar y el editor se adaptan, aunque la experiencia de generación y edición de índices es significativamente mejor en computadora.</div>
+
+  <div class="sec-h4">¿Qué hago si aparece un error de API?</div>
+  <div class="sec-p">Los errores más comunes son: clave incorrecta (verificá que pegaste la key completa), límite de requests alcanzado (esperá 1 minuto y reintentá), o sobrecarga del servidor del proveedor (esperá 2-5 minutos). El mensaje de error especifica el código y el proveedor involucrado.</div>
+
+  <div class="contacto-box">
+    <div class="contacto-titulo">¿Necesitás<br><em>ayuda directa?</em></div>
+    <div class="contacto-desc">El soporte es gestionado directamente por Boris Rodríguez Barrera. Sin intermediarios, sin tickets, sin bots. Respondemos dentro de las 24 horas hábiles.</div>
+    <a href="mailto:bbbarrera1986@gmail.com?subject=Consulta%20Plataforma%20Universitaria%20BRB&body=Hola%20Boris%2C%0A%0AQuiero%20consultar%20sobre%3A%0A%0ANombre%3A%0AUniversidad%3A%0ACorreo%20de%20la%20cuenta%3A%0A" class="btn-contacto">Escribir por Gmail →</a>
+  </div>
+
+  <table class="tabla" style="margin-top:2rem">
+    <tr><th>Motivo</th><th>Cómo contactar</th><th>Tiempo de respuesta</th></tr>
+    <tr><td>Solicitar licencia nueva</td><td><a href="mailto:bbbarrera1986@gmail.com?subject=Solicitud%20de%20licencia%20Plataforma%20Universitaria%20BRB" style="color:var(--oro)">bbbarrera1986@gmail.com</a></td><td>Menos de 24 hs</td></tr>
+    <tr><td>Cambio de dispositivo</td><td><a href="mailto:bbbarrera1986@gmail.com?subject=Cambio%20de%20dispositivo%20Plataforma%20Universitaria%20BRB&body=Nombre%3A%0AEmail%20de%20la%20cuenta%3A%0AMotivo%20del%20cambio%3A" style="color:var(--oro)">bbbarrera1986@gmail.com</a></td><td>Menos de 24 hs</td></tr>
+    <tr><td>Renovación de licencia</td><td><a href="mailto:bbbarrera1986@gmail.com?subject=Renovaci%C3%B3n%20Plataforma%20Universitaria%20BRB" style="color:var(--oro)">bbbarrera1986@gmail.com</a></td><td>Menos de 24 hs</td></tr>
+    <tr><td>Problema técnico</td><td><a href="mailto:bbbarrera1986@gmail.com?subject=Problema%20t%C3%A9cnico%20Plataforma%20Universitaria%20BRB&body=Describí%20el%20problema%3A%0ANavegador%3A%0APantalla%20donde%20ocurre%3A%0AMensaje%20de%20error%3A" style="color:var(--oro)">bbbarrera1986@gmail.com</a></td><td>Menos de 48 hs</td></tr>
+  </table>
+
+  <div style="margin-top:3rem;padding-top:2rem;border-top:1px solid #111;">
+    <div style="font-family:var(--fd);font-size:1.1rem;font-weight:600;color:var(--crema);margin-bottom:.25rem">Boris Rodríguez Barrera</div>
+    <div style="font-family:var(--fm);font-size:.58rem;color:var(--oro-dim);letter-spacing:.1em;margin-bottom:.75rem">ORCID 0009-0004-6583-6439</div>
+    <div style="font-size:.82rem;color:var(--gris-cl);line-height:1.8">
+      Especialista en Gestión de Calidad, Procesos Industriales e Inteligencia Artificial Aplicada<br>
+      Docente — Escuela Municipal de Pesca "Juan Demonte" N.° 2701<br>
+      Puerto Madryn, Chubut, Argentina<br><br>
+      <span style="font-family:var(--fm);font-size:.6rem;color:#333">BRB Estrategia &amp; Procesos · Soberanía Técnica Ediciones</span>
+    </div>
+  </div>
+</div>
+
+</div><!-- fin contenido -->
+
+<script>
+const secciones = document.querySelectorAll('.seccion[id], .portada[id]');
+const links = document.querySelectorAll('.sb-link');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      links.forEach(l => l.classList.remove('activo'));
+      const target = document.querySelector(`.sb-link[href="#${entry.target.id}"]`);
+      if (target) target.classList.add('activo');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+secciones.forEach(s => { if (s.id) observer.observe(s); });
+</script>
+</body>
+</html>
